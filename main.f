@@ -11,15 +11,8 @@ require script.f
 include scripts
 include config
 
-
 include lib/gl1post
-export [if]
-    
+export [if] \ turnkey (save) breaks reloading
     turnkey gamejam2020
-[then]  \ turnkey (save) breaks reloading
+[then]  
 init
-
-\ 0 object as
-\ testani become
-\ 100e 150e xy!
-

@@ -1,4 +1,15 @@
 require lib/fv2d.f
+require sprex.f
+require objlib.f
+/OBJECT
+    fgetset vx vx!
+    fgetset vy vy!
+to /OBJECT
+: prefab: prefab:
+    1e scalex! 1e scaley! \ all floats need to be initialized ...
+    0e angle!
+    0e vx! 0e vy!
+;
 anew scripts
 0 script scripts/lemming
 1 script scripts/lemmingr

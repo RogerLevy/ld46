@@ -2,10 +2,7 @@
 
 /OBJECT
     getset objtype objtype!
-    getset action# action#!
-    fgetset vx vx!
-    fgetset vy vy!
-drop
+to /OBJECT
 
 128 constant /userfields
 
@@ -37,7 +34,7 @@ value /sdata
 
 : become  ( n ) prefab me /objslot move ;
 
-: script  ( n - <filename> )
+: script  ( n - <name> )
     false to warnings?
     include
     true to warnings?

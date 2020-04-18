@@ -1,3 +1,4 @@
+require sprex.f
 
 : load-data
     s" data.f" included
@@ -8,7 +9,7 @@
     2x cls 
     bgp1 [[ draw-as-tilemap ]] 
     bgp2 [[ draw-as-tilemap ]] 
-    draw-sprites
+    draw-sprites-ex
 ;
 
 :while game step

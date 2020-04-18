@@ -5,7 +5,6 @@ prefab: player
     : ;extensions  drop ;
     extensions:
         include anim.f
-        : animate  +counter counter frame ixy! ;
         getset state# state#!        
         fgetset dir dir!          \ angle (0=right,90=down...)
         fgetset speed speed!
@@ -54,7 +53,7 @@ player :: think
         0e speed! idle state#!
     then
     
-    dir speed fvec +xy
+    dir speed fvec vy! vx!
     state# case
         idle of
             idle-animation

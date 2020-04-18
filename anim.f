@@ -15,3 +15,4 @@ fgetset counter counter!
 
 : ixy!  iy! ix! ;
 
+: animate  +counter counter frame ixy! ;
