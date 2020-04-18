@@ -62,4 +62,6 @@ player :: think
             walk-animation
         endof
     endcase
+    
+    bgp1 do-tilemap-physics
 ;

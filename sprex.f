@@ -13,7 +13,9 @@ to /OBJECT
 : draw-as-sprite-ex  ( bitmap# - )
     bmp ?dup if
         ( bitmap ) ix iy iw ih al_create_sub_bitmap >r
-        r@ r@ bmpw 2 / r@ bmph 2 / 2s>f  x floor y floor  
+        r@ r@ bmpw 2 / r@ bmph 2 / 2s>f
+            x floor r@ bmpw 2 / s>f f+
+            y floor r@ bmph 2 / s>f f+
             scalex scaley angle deg>rad flip al_draw_scaled_rotated_bitmap
         r> al_destroy_bitmap
     then

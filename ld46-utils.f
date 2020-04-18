@@ -44,3 +44,8 @@ create pen 0 , 0 ,
 
 
 : +xy  y f+ y! x f+ x! ;
+
+: ixy!  iy! ix! ;
+
+: frame  ( n bmp# - ix iy )
+    bmp bmpw iw / /mod ih * swap iw * swap ;

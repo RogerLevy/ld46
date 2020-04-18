@@ -2,6 +2,7 @@ require sprex.f
 
 : load-data
     s" data.f" included
+    s" scenes.f" included
     1 load
 ;
 
@@ -16,6 +17,6 @@ require sprex.f
     max-objects 0 do
         i object [[ en if
             think  x vx f+ x!  y vy f+ y!
-        then ]]        
+        then ]]
     loop
 ;

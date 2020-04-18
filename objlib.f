@@ -1,4 +1,4 @@
-require utils.f
+require ld46-utils.f
 
 1 value nextid
 

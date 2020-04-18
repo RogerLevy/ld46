@@ -6,6 +6,7 @@ prefab: drunk
     extensions:
         include anim.f
     ;extensions
+    ~sprex    
 ;prefab
 
 anim: idle_down_a 0 , ;anim

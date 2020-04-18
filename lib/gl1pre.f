@@ -7,7 +7,7 @@ finit
 0 value dev
 0 value fullscreen
 0 value mswin
-0 value export
+0 value export?
 
 :noname
     CommandLine 2drop
@@ -16,7 +16,7 @@ finit
             2dup s" -dev" compare 0= dev or to dev 
             2dup s" -fullscreen" compare 0= fullscreen or to fullscreen 
             2dup s" -mswin" compare 0= mswin or to mswin
-            2dup s" -export" compare 0= export or to export
+            2dup s" -export" compare 0= export? or to export?
         2drop 
     loop
 ; execute
@@ -35,6 +35,7 @@ include allegro-5.2.5.f
 require lib/fclean.f
 : require  get-order depth >R fclean -order require depth R> >
     abort"  Stack item(s) left behind" set-order ;
+
 
 320 value vieww
 240 value viewh
@@ -434,7 +435,6 @@ constant /TILEMAP
 ;
 
 \ ---------------------------------------------------------------
-
 dev [if]
     mswin [if] include counter [then]
     
@@ -444,7 +444,6 @@ dev [if]
         
         GetForegroundWindow constant vfx-hwnd
     [then]
-
     
     lenof bitmap 256 array zbmp-file
     lenof bitmap cell array bmp-mtime
@@ -465,3 +464,4 @@ dev [if]
         ( i zstr ) mtime@ swap bmp-mtime !
     ;
 [then]
+

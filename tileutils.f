@@ -1,4 +1,4 @@
-require utils.f
+require ld46-utils.f
 
 0 value src-stride
 0 value dest-stride
