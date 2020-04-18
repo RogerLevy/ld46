@@ -40,7 +40,7 @@ value /sdata
 
 : become  ( n ) prefab me /objslot move ;
 
-: script  ( n - <name> )
+: script  ( n - <filename> )
     false to warnings?
     include
     true to warnings?

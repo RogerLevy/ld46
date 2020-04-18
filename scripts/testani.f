@@ -1,5 +1,4 @@
 prefab: testani
-    \ 224 ix! 0 iy!
     $0303 attr!  \ 64x64 sprite
     2 bmp#!
 ;prefab

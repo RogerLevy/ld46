@@ -12,6 +12,10 @@ include config
 
 
 include lib/gl1post
+export [if]
+    
+    turnkey gamejam2020
+[then]  \ turnkey (save) breaks reloading
 init
 
 \ 0 object as

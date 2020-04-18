@@ -1,0 +1,11 @@
+grapple/stamina meter
+  you can't do certain actions forever - such as running or
+    dragging the friend.  eventually you tire and it gets
+    worse as the night goes on
+
+point of attention which switches if attractiveness
+  overwhelms self-awareness
+
+self-awareness meter
+  call/grapple boosts it
+  as it lowers, magnetism to distractions increases 

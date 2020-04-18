@@ -8,7 +8,7 @@ fgetset counter counter!
 
 ( TODO: could be optimized with a "bmpcols" array )
 
-: frame  ( f: counter - ix iy )
+: frame  ( f: counter anim - ix iy )
     dup @ >r cell+ f>s r> mod cells + @
     bmp# bmp bmpw iw / /mod ih * swap iw * swap 
 ;

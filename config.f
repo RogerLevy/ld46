@@ -1,7 +1,7 @@
 
 : load-data
     s" data.f" included
-    0 load
+    1 load
 ;
 
 :while game update
