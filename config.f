@@ -1,7 +1,6 @@
 
 : load-data
-    0 z" data/lemming.png" load-bitmap
-    1 z" data/test.tiles.png" load-bitmap
+    s" data.f" included
     0 load
 ;
 

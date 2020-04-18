@@ -15,5 +15,6 @@ include lib/gl1post
 init
 
 0 object as
-lemming become
+testani become
 100e 150e xy!
+
