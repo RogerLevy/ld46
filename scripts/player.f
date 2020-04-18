@@ -1,17 +1,17 @@
 prefab: player
     $0100 attr!  \ 16x32 sprite
     4 bmp#!
+    : extensions:  /userfields ;
+    : ;extensions  drop ;
+    extensions:
+        include anim.f
+        : animate  +counter counter frame ixy! ;
+        getset state# state#!        
+        fgetset dir dir!          \ angle (0=right,90=down...)
+        fgetset speed speed!
+    ;extensions
+
 ;prefab
-
-: extensions:  /userfields ;
-: ;extensions  drop ;
-
-\ maybe move this up, for intuitiveness?
-extensions:
-    include anim.f
-    getset state# state#!
-    getset dir dir!          \ angle (0=right,90=up...)
-;extensions
 
 anim: idle_down_a 0 , ;anim
 anim: idle_up_a 1 , ;anim
@@ -23,43 +23,44 @@ anim: walk_right_a 6 , 7 , 8 , 9 , ;anim
 0 constant idle
 1 constant walk
 
-: dir-key-pressed?
-    <left> pressed  if dir 180 dir! 180 <> exit then 
-    <right> pressed if dir 0 dir!   0 <> exit then 
-    <up> pressed    if dir 90 dir!  90 <> exit then 
-    <down> pressed  if dir 270 dir! 270 <> exit then
-    0 ;
+: dir-key-held?
+    <up> held <down> held <right> held <left> held or or or 
+;
 
-: dir-key-letgo?
-    dir case
-        0 of <right>  letgo exit endof
-        90 of <up>    letgo exit endof
-        180 of <left> letgo exit endof
-        270 of <down> letgo exit endof
-    endcase
-;    
+: kb>xdir  0e <right> held if 1e f+ then  <left> held if 1e f- then ;
+: kb>ydir  0e <down> held if 1e f+ then  <up> held if 1e f- then ;
 
+: awithin?  2dup < if within? else rot 360 + -rot 360 + within? then ;
+
+: idle-animation
+    dir f>s 315 45  awithin? if 0e idle_right_a animate  0 flip!  then
+    dir f>s 45 135  awithin? if 0e idle_down_a  animate  then
+    dir f>s 135 225 awithin? if 0e idle_right_a animate  1 flip!  then
+    dir f>s 225 315 awithin? if 0e idle_up_a    animate  then
+;
+
+: walk-animation
+    1e 8e f/ ( animation speed )
+    dir f>s 45 135  awithin? if walk_down_a  animate  exit then
+    dir f>s 225 315 awithin? if walk_up_a    animate  exit then
+    dir f>s 315 45  awithin? if walk_right_a animate  0 flip!  exit then
+    dir f>s 135 225 awithin? if walk_right_a animate  1 flip!  exit then
+;
 player :: think
+    dir-key-held? if
+        1e speed! walk state#!
+        kb>xdir kb>ydir fangle dir!
+    else
+        0e speed! idle state#!
+    then
+    
+    dir speed fvec +xy
     state# case
         idle of
-            dir-key-pressed? if walk state#! recurse exit then
-            dir case
-                0 of 0 flip! 0e idle_right_a frame ixy! endof
-                90 of 0e idle_up_a frame ixy! endof
-                180 of 1 flip! 0e idle_right_a frame ixy! endof
-                270 of 0e idle_down_a frame ixy! endof
-            endcase
+            idle-animation
         endof
         walk of
-            dir-key-letgo? if idle state#! recurse exit then
-            dir-key-pressed? if walk state#! recurse exit then
-            1e 8e f/ +counter 
-            dir case
-                0 of   x 1e f+ x! counter walk_right_a frame ixy!  0 flip! endof
-                90 of  y 1e f- y! counter walk_up_a frame ixy! endof
-                180 of x 1e f- x! counter walk_right_a frame ixy!  1 flip! endof
-                270 of y 1e f+ y! counter walk_down_a frame ixy! endof
-            endcase
+            walk-animation
         endof
-    endcase    
+    endcase
 ;

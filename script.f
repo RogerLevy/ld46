@@ -30,9 +30,6 @@ max-prefabs 1024 array sdata  \ static data such as actions
 : ::  ( prefab - <vector> )
     prefab [[ :noname ' >body @ objtype sdata + ! ]] ;
 
-
-( TODO: actions )
-
 32  \ name (1+31)
     vector start start!
     vector think think!   \ temporary

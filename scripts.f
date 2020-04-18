@@ -1,3 +1,4 @@
+require lib/fv2d.f
 anew scripts
 0 script scripts/lemming
 1 script scripts/lemmingr

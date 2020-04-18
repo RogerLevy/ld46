@@ -43,3 +43,4 @@ create pen 0 , 0 ,
 : type  ?dup if type else drop then ;
 
 
+: +xy  y f+ y! x f+ x! ;
