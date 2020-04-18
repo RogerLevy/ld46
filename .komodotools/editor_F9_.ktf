@@ -1,5 +1,5 @@
-// komodo tool: editor.exe
-// =======================
+// komodo tool: editor [F9]
+// ========================
 // cwd: %p
 // doNotOpenOutputWindow: 0
 // insertOutput: 0
@@ -11,5 +11,5 @@
 // showParsedOutputList: 0
 // type: command
 // version: 1.1.5
-// =======================
-editor.exe
+// ========================
+editor [F9]

@@ -1,5 +1,5 @@
-// komodo tool: vfx dev export [F12]
-// =================================
+// komodo tool: vfx -dev -mswin -export [F12]
+// ==========================================
 // cwd: %p
 // doNotOpenOutputWindow: 1
 // insertOutput: 0
@@ -12,5 +12,5 @@
 // showParsedOutputList: 0
 // type: command
 // version: 1.1.5
-// =================================
+// ==========================================
 "vfx.lnk" -dev -mswin -export

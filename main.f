@@ -14,7 +14,7 @@ include config
 include lib/gl1post
 init
 
-0 object as
-testani become
-100e 150e xy!
+\ 0 object as
+\ testani become
+\ 100e 150e xy!
 
