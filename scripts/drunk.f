@@ -9,9 +9,12 @@ prefab: drunk
         fgetset dir dir!          \ angle (0=right,90=down...)
         fgetset speed speed!
         getset flail flail!      \ flail selector
+        getset adrenalin adrenalin!
+        getset attention attention!
     ;extensions
-
 ;prefab
+
+require lib/strout.f
 
 anim: idle_down_a 0 , ;anim
 anim: idle_up_a 1 , ;anim
@@ -81,14 +84,45 @@ anim: waddle_right_a 18 , 9 , 19 , ;anim
 \     me party push 
 \     act> 
     
-: stumbling  close? not if chase else 0e speed! then ;
+: stumbling
+    state# walk = adrenalin 1 = and if
+        0e speed! idle state#!
+    then
+    
+    adrenalin 1 > if
+        walk state#!
+        attention 1 = if
+            360e frnd dir! 0.6666e speed! 
+        else
+            attention 1 > if
+                close? not if chase else 0e speed! then
+            then
+        then
+    then
+    
+    attention 1 - 0 max attention!
+    adrenalin 1 - 0 max adrenalin!
+;
+
+:noname 
+    0 object [[ attention 0 = adrenalin 0 = ]] or if
+        0 play
+        0 object [[
+            180 rnd 180 + attention!
+            500 rnd 500 + adrenalin!
+        ]]
+    then
+; is call-msg
 
 
-
+drunk :: start
+    180 rnd 180 + attention!
+    500 rnd 500 + adrenalin!
+    walk state#!
+    0e angle!
+;    
 
 drunk :: think
-    0e angle!
-    walk state#!
     
     \ logic
     stumbling       
@@ -107,4 +141,8 @@ drunk :: think
     endcase
 
     lifetime 1 + lifetime!
+;
+
+drunk :: debug
+    ." Adrenalin: " adrenalin . ." Attention: " attention .
 ;

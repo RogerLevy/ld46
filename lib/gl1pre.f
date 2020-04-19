@@ -253,6 +253,7 @@ screen game game
 ;
 
 256 cell array sample
+: smp  sample @ ;
 
 : -bitmap  ?dup if al_destroy_bitmap then ;
 : -sample  ?dup if al_destroy_sample then ;
@@ -276,8 +277,12 @@ screen game game
 0 value sid
 0 value strm
 
-: play  ( sample loopmode - )
-    >r  1e 0e 1e  r>  & sid  al_play_sample ;
+: play  ( sample# - )
+    smp  1e 0e 1e  ALLEGRO_PLAYMODE_ONCE   & sid  al_play_sample ;
+
+: playloop  ( sample# - )
+    smp  1e 0e 1e  ALLEGRO_PLAYMODE_LOOP   & sid  al_play_sample ;
+
 
 : stream ( zstr loopmode - )
     strm ?dup if al_destroy_audio_stream  0 to strm then

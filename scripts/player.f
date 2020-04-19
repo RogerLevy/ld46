@@ -18,9 +18,13 @@ anim: idle_right_a 6 , ;anim
 anim: walk_down_a 2 , 3 , ;anim
 anim: walk_up_a 4 , 5 , ;anim
 anim: walk_right_a 6 , 7 , 8 , 9 , ;anim
+anim: call_down_a 13 , 14 , 15 , 15 , 15 , 15 , ;anim
+anim: call_up_a 16 , 17 , 18 , 18 , 18 , 18 , ;anim
+anim: call_right_a 10 , 11 , 12 , 12 , 12 , 12 , ;anim
 
 0 constant idle
 1 constant walk
+2 constant calling
 
 : dir-key-held?
     <up> held <down> held <right> held <left> held or or or 
@@ -46,22 +50,45 @@ anim: walk_right_a 6 , 7 , 8 , 9 , ;anim
     dir f>s 135 225 awithin? if walk_right_a animate  1 flip!  exit then
 ;
 
-player :: think
+: call-animation
+    1e 8e f/ ( animation speed )
+    dir f>s 45 135  awithin? if call_down_a  animate  exit then
+    dir f>s 225 315 awithin? if call_up_a    animate  exit then
+    dir f>s 315 45  awithin? if call_right_a animate  0 flip!  exit then
+    dir f>s 135 225 awithin? if call_right_a animate  1 flip!  exit then
+;
+
+: idle-walk
     dir-key-held? if
         1e speed! walk state#!
         kb>xdir kb>ydir fangle dir!
     else
         0e speed! idle state#!
     then
-    
-    dir speed fvec vy! vx!
+;
+
+player :: think
+
+    \ logic
+    <z> pressed if
+        calling state#!
+        0e counter!
+        call-msg
+    then
     state# case
-        idle of
-            idle-animation
-        endof
-        walk of
-            walk-animation
-        endof
+        idle of idle-walk endof
+        walk of idle-walk endof
+        calling of counter 6e f>= if idle state#! then endof
     endcase
+    
+    \ physics
+    dir speed fvec vy! vx!
     do-collisions
+    
+    \ animation
+    state# case
+        idle of idle-animation endof
+        walk of walk-animation endof
+        calling of call-animation endof
+    endcase
 ;

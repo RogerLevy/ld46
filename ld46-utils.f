@@ -1,3 +1,6 @@
+
+defer call-msg  ' noop is call-msg
+
 synonym | locals|
 synonym & addr immediate
 : ]#  ] postpone literal ;

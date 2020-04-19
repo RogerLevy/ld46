@@ -12,7 +12,27 @@
     ]]
 ;scene
 
-1 scene: city1
+1 scene: drunkcity
+    0 s.layer [[
+        1 l.bmp#!
+        z" data/drunkcity.layer-1.stm" l.zstm!
+	    z" data/drunkstreet.tiles.png" l.zbmp!
+    ]]
+    1 s.layer [[
+        1 l.bmp#!
+        z" data/drunkcity.layer-2.stm" l.zstm!
+    ]]
+    2 s.layer [[
+        1 l.bmp#!
+        z" data/drunkcity.layer-3.stm" l.zstm!
+    ]]
+    3 s.layer [[
+        1 l.bmp#!
+        z" data/drunkcity.layer-4.stm" l.zstm!
+    ]]
+;scene
+
+2 scene: city1
     0 s.layer [[
         1 l.bmp#!
         z" data/city1.layer-1.stm" l.zstm!
@@ -21,8 +41,4 @@
         1 l.bmp#!
         z" data/city1.layer-2.stm" l.zstm!
     ]]
-    2 s.layer [[
-        1 l.bmp#!
-        z" data/city1.layer-3.stm" l.zstm!
-    ]]    
 ;scene

@@ -2,13 +2,16 @@ require lib/fv2d.f
 require sprex.f
 require objlib.f
 require ld46-utils.f
-
-/OBJECT
-    fgetset vx vx!
-    fgetset vy vy!
-    getset lifetime lifetime!
-to /OBJECT
-
+[undefined] vx [if]
+    /OBJECT
+        fgetset vx vx!
+        fgetset vy vy!
+        getset lifetime lifetime!
+    to /OBJECT
+    /sdata
+        method debug debug!
+    to /sdata
+[then]
 require tilecol.f  ( needs vx vy )
 
 anew scripts
