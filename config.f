@@ -11,6 +11,7 @@ require sprex.f
     bgp1 [[ draw-as-tilemap ]] 
     bgp2 [[ draw-as-tilemap ]] 
     draw-sprites-ex
+    bgp4 [[ draw-as-tilemap ]] 
 ;
 
 :while game step

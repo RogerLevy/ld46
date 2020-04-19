@@ -18,7 +18,7 @@ anew scripts
     0e vx! 0e vy!
 ;
 : do-collisions
-    bgp1 do-tilemap-physics
+    bgp3 do-tilemap-physics
 ;
 
 0 script scripts/lemming

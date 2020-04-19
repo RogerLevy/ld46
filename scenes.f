@@ -21,4 +21,8 @@
         1 l.bmp#!
         z" data/city1.layer-2.stm" l.zstm!
     ]]
+    2 s.layer [[
+        1 l.bmp#!
+        z" data/city1.layer-3.stm" l.zstm!
+    ]]    
 ;scene

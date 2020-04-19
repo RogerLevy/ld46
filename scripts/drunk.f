@@ -21,7 +21,7 @@ anim: walk_up_a 4 , 5 , ;anim
 anim: walk_right_a 6 , 7 , 8 , 9 , ;anim
 anim: waddle_down_a 10 , 11 , 12 , 13 , ;anim
 anim: waddle_up_a 14 , 15 , 16 , 17 , ;anim
-anim: waddle_right_a 18 , 19 , ;anim
+anim: waddle_right_a 18 , 9 , 19 , ;anim
 
 0 constant idle
 1 constant walk
@@ -101,8 +101,8 @@ drunk :: think
     state# case
         idle of idle-animation endof
         walk of
-            lifetime 30 mod 0 = if 4 rnd flail! then
-            flail 1 >= if walk-animation else waddle-animation then
+            lifetime 30 mod 0 = if 5 rnd flail! then
+            flail 2 >= if walk-animation else waddle-animation then
         endof
     endcase
 
