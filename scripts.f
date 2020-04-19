@@ -1,32 +1,20 @@
-require lib/fv2d.f
-require sprex.f
-require objlib.f
 require ld46-utils.f
-[undefined] vx [if]
-    /OBJECT
-        fgetset vx vx!
-        fgetset vy vy!
-        getset lifetime lifetime!
-        fgetset mbx mbx!
-        fgetset mby mby!
-        fgetset mbw mbw!
-        fgetset mbh mbh!
-        
-    to /OBJECT
-    /sdata
-        method debug debug!
-    to /sdata
-[then]
-require tilecol.f  ( needs vx vy )
+require lib/fv2d.f
+require objlib.f
+require common.f
 
 anew scripts
 : prefab: prefab:
     1e scalex! 1e scaley! \ all floats need to be initialized ...
     0e angle!
+    0e ofsx! 0e ofsy!
     0e vx! 0e vy!
     0e mbx! 0e mby!
-    16e mbw! 16e mbh! 
+    16e mbw! 16e mbh!
+    /userfields    
 ;
+: ;prefab drop ;
+
 : do-collisions
     bgp3 do-tilemap-physics
 ;
@@ -37,3 +25,9 @@ anew scripts
 3 script scripts/drunk
 4 script scripts/player
 5 script scripts/greencar
+6 script scripts/purplecar
+7 script scripts/alleyzone
+8 script scripts/bbqzone
+9 script scripts/depotzone
+10 script scripts/pizzazone
+

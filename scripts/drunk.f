@@ -1,124 +1,108 @@
 prefab: drunk
     $0100 attr!  \ 16x32 sprite
     3 bmp#!
-    : extensions:  /userfields ;
-    : ;extensions  drop ;
-    extensions:
-        include anim.f
-        getset state# state#!        
-        fgetset dir dir!          \ angle (0=right,90=down...)
-        fgetset speed speed!
-        getset flail flail!      \ flail selector
-        getset adrenalin adrenalin!
-        getset attention attention!
-    ;extensions
+    include anim.f
+    include state.f 
+    fgetset dir dir!          \ angle (0=right,90=down...)
+    fgetset speed speed!
+    getset flail flail!      \ flail selector
+    getset adrenalin adrenalin!
+    getset attention attention!
+    getset compliance compliance!  \ 0 = non-compliant
 ;prefab
 
 require lib/strout.f
 
-anim: idle_down_a 0 , ;anim
-anim: idle_up_a 1 , ;anim
-anim: idle_right_a 6 , ;anim
-anim: walk_down_a 2 , 3 , ;anim
-anim: walk_up_a 4 , 5 , ;anim
-anim: walk_right_a 6 , 7 , 8 , 9 , ;anim
-anim: waddle_down_a 10 , 11 , 12 , 13 , ;anim
-anim: waddle_up_a 14 , 15 , 16 , 17 , ;anim
-anim: waddle_right_a 18 , 9 , 19 , ;anim
+anim: idle_down_a     0 , ;anim
+anim: idle_up_a       1 , ;anim
+anim: idle_right_a    6 , ;anim
+anim: walk_down_a     2 , 3 , ;anim
+anim: walk_up_a       4 , 5 , ;anim
+anim: walk_right_a    6 , 7 , 8 , 9 , ;anim
+anim: waddle_down_a   10 , 11 , 12 , 13 , ;anim
+anim: waddle_up_a     14 , 15 , 16 , 17 , ;anim
+anim: waddle_right_a  18 , 9 , 19 , ;anim
+anim: fall_down_a     25 , ;anim
+anim: fall_right_a    22 , ;anim
+anim: sitting_down_a  26 , 27 , ;anim
+anim: sitting_right_a 23 , 24 , ;anim
+anim: lie_a           28 , 29 , ;anim
 
-0 constant idle
-1 constant walk
-
-: awithin?  2dup <= if within? else rot 360 - rot 360 - rot within? then ;
-
-: idle-animation
-    dir f>s 315 45  awithin? if 0e idle_right_a animate  0 flip!  then
-    dir f>s 45 135  awithin? if 0e idle_down_a  animate  then
-    dir f>s 135 225 awithin? if 0e idle_right_a animate  1 flip!  then
-    dir f>s 225 315 awithin? if 0e idle_up_a    animate  then
+: ?animate  ( speed up down left right -- )
+    dir f>s 45 135  within? if drop drop nip animate exit then
+    dir f>s 225 315 within? if drop drop drop animate  exit then
+    dir f>s 45 < dir f>s 315 > or if nip nip nip animate  0 flip!  exit then
+    dir f>s 135 225 within? if drop nip nip animate  1 flip!  then
 ;
 
-: walk-animation
-    1e 12e f/ ( animation speed )
-    dir f>s 45 135  awithin? if walk_down_a  animate  exit then
-    dir f>s 225 315 awithin? if walk_up_a    animate  exit then
-    dir f>s 45 < dir f>s 315 > or if walk_right_a animate  0 flip!  exit then
-    dir f>s 135 225 awithin? if walk_right_a animate  1 flip!  exit then
-    fdrop
-;
+0 state: stop idle    
+1 state: walk walking 
+2 state: sit  sitting 
+3 state: konk unconscious 
+4 state: fall falling 
 
-: waddle-animation
-    1e 12e f/ ( animation speed )
-    dir f>s 45 135  awithin? if waddle_down_a  animate  exit then
-    dir f>s 225 315 awithin? if waddle_up_a    animate  exit then
-    dir f>s 45 < dir f>s 315 > or if waddle_right_a animate  0 flip!  exit then
-    dir f>s 135 225 awithin? if waddle_right_a animate  1 flip!  exit then
-    fdrop
-;
+: idle-animation  0e idle_up_a idle_down_a idle_right_a idle_right_a  ?animate ;
+: walk-animation  1e 12e f/ walk_up_a walk_down_a walk_right_a walk_right_a  ?animate ;
+: waddle-animation  1e 12e f/ waddle_up_a waddle_down_a waddle_right_a waddle_right_a   ?animate ;
+: lie-animation  1e 12e f/ lie_a animate ;
+: sitting-animation  1e 12e f/ sitting_down_a sitting_down_a sitting_right_a sitting_right_a ?animate ;
+: fall-animation  0e fall_down_a fall_down_a fall_right_a fall_right_a  ?animate ;
 
-
-: focus 1 object ;
-
-\ : -v  0 0 vx 2! ;
-\ : rdelay  0.5 2 between delay ;
-
+: focus     player1 ;
 : distance  's xy xy fdist ;
-: close?  focus distance 50e f< ;
-
-\ : /wander  
-\     0 perform> begin    
-\         leader @ if
-\             close? if
-\                 360 rnd 0.5 vec vx 2! rdelay -v rdelay 
-\             else
-\                 pause
-\             then
-\         else
-\             -v rdelay 360 rnd 0.5 vec vx 2! rdelay 
-\         then
-\     again ;
-
-: chase   focus 's xy  xy  2f-  fangle dir! 0.6666e speed! ;
-
-\ : enlist  p1 leader !  enlisted# state !  /wander
-\     me party push 
-\     act> 
-    
-: stumbling
-    state# walk = adrenalin 1 = and if
-        0e speed! idle state#!
-    then
-    
-    adrenalin 1 > if
-        walk state#!
-        attention 1 = if
-            360e frnd dir! 0.6666e speed! 
-        else
-            attention 1 > if
-                close? not if chase else 0e speed! then
-            then
-        then
-    then
-    
+: close?    focus distance 35e f< ;
+: chase     focus 's xy  xy  2f-  fangle dir! 0.6666e speed!  true to following?  ;
+: deplete
     attention 1 - 0 max attention!
     adrenalin 1 - 0 max adrenalin!
 ;
 
+:start stop 0e speed! ;
+:step stop
+    attention 1 > focus 0<> and if
+        close? not if chase walk then
+    then
+    deplete
+;
+
+
+:start sit 0e speed!  2 rnd compliance!  false to following? ;
+:step sit  ;
+
+:start walk
+    true to following?
+    1 compliance!
+;
+:step walk
+    adrenalin 0 = if sit exit then
+    attention 1 = if
+        2 rnd compliance!
+        360e frnd dir! 0.6666e speed!
+        false to following?
+    else
+        attention 1 > focus 0<> and if
+            close? if stop else chase then
+        then
+    then
+    deplete
+;
+
 :noname 
-    0 object [[ attention 0 = adrenalin 0 = ]] or if
+    drunk1 [[ attention 0 = adrenalin 0 = or ]] if
         0 play
-        0 object [[
-            180 rnd 180 + attention!
-            500 rnd 500 + adrenalin!
+        drunk1 [[
+            compliance 0 <> if
+                360 rnd 360 + attention!
+                500 rnd 500 + adrenalin!
+            then
         ]]
     then
 ; is call-msg
 
-
 drunk :: think
     
     \ logic
-    stumbling       
+    do-state
 
     \ physics
     dir speed fvec vy! vx!
@@ -127,10 +111,13 @@ drunk :: think
     \ animation
     state# case
         idle of idle-animation endof
-        walk of
+        walking of
             lifetime 30 mod 0 = if 5 rnd flail! then
             flail 2 >= if walk-animation else waddle-animation then
         endof
+        sitting of sitting-animation endof
+        falling of fall-animation endof
+        unconscious of lie-animation endof
     endcase
 
     lifetime 1 + lifetime!
@@ -141,9 +128,10 @@ drunk :: debug
 ;
 
 drunk :: start
-    180 rnd 180 + attention!
+    me to drunk1
+    360 rnd 360 + attention!
     500 rnd 500 + adrenalin!
-    walk state#!
     0e angle!
-    0e mbx! 16e mby! 16e mbw! 16e mbh!
+    0e mbx! 24e mby! 16e mbw! 8e mbh!
+    walk
 ;    

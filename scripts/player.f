@@ -1,15 +1,10 @@
 prefab: player
     $0100 attr!  \ 16x32 sprite
     4 bmp#!
-    : extensions:  /userfields ;
-    : ;extensions  drop ;
-    extensions:
-        include anim.f
-        getset state# state#!        
-        fgetset dir dir!          \ angle (0=right,90=down...)
-        fgetset speed speed!
-    ;extensions
-
+    include anim.f
+    getset state# state#!        
+    fgetset dir dir!          \ angle (0=right,90=down...)
+    fgetset speed speed!
 ;prefab
 
 anim: idle_down_a 0 , ;anim
@@ -74,10 +69,18 @@ anim: call_right_a 10 , 11 , 12 , 12 , 12 , 12 , ;anim
     0e speed!
 ;
 
+: near?  dup if 's xy xy fdist 40e f<= then ;
+
+: z-logic
+    car1 near? drunk1 near? and if win exit then
+    following? not if call then
+;
+
 player :: think
 
     \ logic
-    <z> pressed if call then
+    <z> pressed if z-logic then
+    
     state# case
         idle of idle-walk endof
         walk of idle-walk endof
@@ -97,5 +100,7 @@ player :: think
 ;
 
 player :: start
-    0e mbx! 16e mby! 16e mbw! 16e mbh!
+    me to player1
+    0e mbx! 24e mby! 16e mbw! 8e mbh!
+    ~sprex
 ;

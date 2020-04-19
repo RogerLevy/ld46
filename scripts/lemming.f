@@ -1,13 +1,7 @@
 prefab: lemming
     224 ix! 0 iy!
-;prefab
-
-: extensions:  /userfields ;
-: ;extensions  drop ;
-
-extensions:
     include anim.f
-;extensions
+;prefab
 
 anim: walk_a 15 , 14 , 13 , 12 , 11 , 10 , 9 , 8 , ;anim
 

@@ -5,6 +5,8 @@
     fgetset angle angle!
     fgetset scalex scalex!
     fgetset scaley scaley!
+    fgetset ofsx ofsx!
+    fgetset ofsy ofsy!
 to /OBJECT
 
 : ~sprex  attr $80000000 or attr! ;
@@ -13,7 +15,9 @@ to /OBJECT
 : draw-as-sprite-ex  ( bitmap# - )
     bmp ?dup if
         ( bitmap ) ix iy iw ih al_create_sub_bitmap >r
-        r@ r@ bmpw 2 / r@ bmph 2 / 2s>f
+        r@
+            r@ bmpw 2 / s>f ofsx f+
+            r@ bmph 2 / s>f ofsy f+
             x floor r@ bmpw 2 / s>f f+
             y floor r@ bmph 2 / s>f f+
             scalex scaley angle deg>rad flip al_draw_scaled_rotated_bitmap
