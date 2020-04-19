@@ -19,16 +19,17 @@ require sprex.f
     2x cls
 
     1 object [[
-        x 160e f- 0e fmax  y 120e f- 0e fmax  bgp1 [[ tm.scrolly! tm.scrollx! ]]
-        x 160e f- 0e fmax  y 120e f- 0e fmax  bgp2 [[ tm.scrolly! tm.scrollx! ]]
-        x 160e f- 0e fmax  y 120e f- 0e fmax  bgp4 [[ tm.scrolly! tm.scrollx! ]]    
+        x floor 160e f- 0e fmax  y floor 120e f- 0e fmax
+        fover fover    bgp1 [[ tm.scrolly! tm.scrollx! ]]
+        fover fover    bgp2 [[ tm.scrolly! tm.scrollx! ]]
+                        bgp4 [[ tm.scrolly! tm.scrollx! ]]    
     ]]    
     bgp1 [[ draw-as-tilemap ]] 
     bgp2 [[ draw-as-tilemap ]] 
 
     1 object [[
-        m x 160e f- 0e fmax fnegate zoom f*
-          y 120e f- 0e fmax fnegate zoom f* al_translate_transform
+        m x floor 160e f- 0e fmax fnegate zoom f*
+          y floor 120e f- 0e fmax fnegate zoom f* al_translate_transform
         m al_use_transform 
     ]]
     draw-sprites-ex
