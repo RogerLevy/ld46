@@ -14,6 +14,7 @@ require sprex.f
 ;
 
 :while game step
+    finit
     max-objects 0 do
         i object [[ en if
             think  x vx f+ x!  y vy f+ y!

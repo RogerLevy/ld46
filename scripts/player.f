@@ -39,12 +39,13 @@ anim: walk_right_a 6 , 7 , 8 , 9 , ;anim
 ;
 
 : walk-animation
-    1e 8e f/ ( animation speed )
+    1e 12e f/ ( animation speed )
     dir f>s 45 135  awithin? if walk_down_a  animate  exit then
     dir f>s 225 315 awithin? if walk_up_a    animate  exit then
     dir f>s 315 45  awithin? if walk_right_a animate  0 flip!  exit then
     dir f>s 135 225 awithin? if walk_right_a animate  1 flip!  exit then
 ;
+
 player :: think
     dir-key-held? if
         1e speed! walk state#!
@@ -62,6 +63,5 @@ player :: think
             walk-animation
         endof
     endcase
-    
-    bgp1 do-tilemap-physics
+    do-collisions
 ;
