@@ -7,6 +7,11 @@ require ld46-utils.f
         fgetset vx vx!
         fgetset vy vy!
         getset lifetime lifetime!
+        fgetset mbx mbx!
+        fgetset mby mby!
+        fgetset mbw mbw!
+        fgetset mbh mbh!
+        
     to /OBJECT
     /sdata
         method debug debug!
@@ -19,6 +24,8 @@ anew scripts
     1e scalex! 1e scaley! \ all floats need to be initialized ...
     0e angle!
     0e vx! 0e vy!
+    0e mbx! 0e mby!
+    16e mbw! 16e mbh! 
 ;
 : do-collisions
     bgp3 do-tilemap-physics

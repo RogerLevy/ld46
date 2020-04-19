@@ -39,10 +39,10 @@ module collisioning
     0 value t
     
     : gap  16e ; 
-    : px  x ;
-    : py  y ;
-    : mbw iw s>f ;
-    : mbh ih s>f ;    
+    : px  x mbx f+ ;
+    : py  y mby f+ ;
+    \ : mbw iw s>f ;
+    \ : mbh ih s>f ;    
 
     : xy>cr  ( f: x y - c r )
         fswap gap f/ f>s gap f/ f>s ;

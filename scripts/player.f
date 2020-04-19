@@ -67,14 +67,17 @@ anim: call_right_a 10 , 11 , 12 , 12 , 12 , 12 , ;anim
     then
 ;
 
+: call 
+    calling state#!
+    0e counter!
+    call-msg
+    0e speed!
+;
+
 player :: think
 
     \ logic
-    <z> pressed if
-        calling state#!
-        0e counter!
-        call-msg
-    then
+    <z> pressed if call then
     state# case
         idle of idle-walk endof
         walk of idle-walk endof
@@ -91,4 +94,8 @@ player :: think
         walk of walk-animation endof
         calling of call-animation endof
     endcase
+;
+
+player :: start
+    0e mbx! 16e mby! 16e mbw! 16e mbh!
 ;

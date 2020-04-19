@@ -115,13 +115,6 @@ anim: waddle_right_a 18 , 9 , 19 , ;anim
 ; is call-msg
 
 
-drunk :: start
-    180 rnd 180 + attention!
-    500 rnd 500 + adrenalin!
-    walk state#!
-    0e angle!
-;    
-
 drunk :: think
     
     \ logic
@@ -146,3 +139,11 @@ drunk :: think
 drunk :: debug
     ." Adrenalin: " adrenalin . ." Attention: " attention .
 ;
+
+drunk :: start
+    180 rnd 180 + attention!
+    500 rnd 500 + adrenalin!
+    walk state#!
+    0e angle!
+    0e mbx! 16e mby! 16e mbw! 16e mbh!
+;    
