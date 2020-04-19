@@ -1,4 +1,4 @@
 prefab: pizzazone
     $0509 attr!  
-    9 bmp#!
+    10 bmp#!
 ;prefab

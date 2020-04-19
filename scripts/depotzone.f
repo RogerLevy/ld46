@@ -1,4 +1,4 @@
 prefab: depotzone
-    $0807 attr!  
-    8 bmp#!
+    $0708 attr!  
+    9 bmp#!
 ;prefab
