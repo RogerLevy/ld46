@@ -12,7 +12,7 @@
     ]]
 ;scene
 
-1 scene: drunkcity
+1 scene: drunkcity1a
     0 s.layer [[
         1 l.bmp#!
         z" data/drunkcity.layer-1.stm" l.zstm!
@@ -32,13 +32,163 @@
     ]]
 ;scene
 
-2 scene: city1
+2 scene: drunkcity2a
     0 s.layer [[
         1 l.bmp#!
-        z" data/city1.layer-1.stm" l.zstm!
+        z" data/drunkcity.layer-1.stm" l.zstm!
+	    z" data/drunkstreet.tiles.png" l.zbmp!
     ]]
     1 s.layer [[
         1 l.bmp#!
-        z" data/city1.layer-2.stm" l.zstm!
+        z" data/drunkcity.layer-2.stm" l.zstm!
+    ]]
+    2 s.layer [[
+        1 l.bmp#!
+        z" data/drunkcity.layer-3.stm" l.zstm!
+    ]]
+    3 s.layer [[
+        1 l.bmp#!
+        z" data/drunkcity.layer-4.stm" l.zstm!
     ]]
 ;scene
+
+3 scene: drunkcity3a
+    0 s.layer [[
+        1 l.bmp#!
+        z" data/drunkcity.layer-1.stm" l.zstm!
+	    z" data/drunkstreet.tiles.png" l.zbmp!
+    ]]
+    1 s.layer [[
+        1 l.bmp#!
+        z" data/drunkcity.layer-2.stm" l.zstm!
+    ]]
+    2 s.layer [[
+        1 l.bmp#!
+        z" data/drunkcity.layer-3.stm" l.zstm!
+    ]]
+    3 s.layer [[
+        1 l.bmp#!
+        z" data/drunkcity.layer-4.stm" l.zstm!
+    ]]
+;scene
+
+4 scene: drunkcity1b
+    0 s.layer [[
+        1 l.bmp#!
+        z" data/drunkcity.layer-1.stm" l.zstm!
+	    z" data/drunkstreet.tiles.png" l.zbmp!
+    ]]
+    1 s.layer [[
+        1 l.bmp#!
+        z" data/drunkcityb.layer-2.stm" l.zstm!
+    ]]
+    2 s.layer [[
+        1 l.bmp#!
+        z" data/drunkcityb.layer-3.stm" l.zstm!
+    ]]
+    3 s.layer [[
+        1 l.bmp#!
+        z" data/drunkcity.layer-4.stm" l.zstm!
+    ]]
+;scene
+
+5 scene: drunkcity2b
+    0 s.layer [[
+        1 l.bmp#!
+        z" data/drunkcity.layer-1.stm" l.zstm!
+	    z" data/drunkstreet.tiles.png" l.zbmp!
+    ]]
+    1 s.layer [[
+        1 l.bmp#!
+        z" data/drunkcityb.layer-2.stm" l.zstm!
+    ]]
+    2 s.layer [[
+        1 l.bmp#!
+        z" data/drunkcityb.layer-3.stm" l.zstm!
+    ]]
+    3 s.layer [[
+        1 l.bmp#!
+        z" data/drunkcity.layer-4.stm" l.zstm!
+    ]]
+;scene
+
+6 scene: drunkcity3b
+    0 s.layer [[
+        1 l.bmp#!
+        z" data/drunkcity.layer-1.stm" l.zstm!
+	    z" data/drunkstreet.tiles.png" l.zbmp!
+    ]]
+    1 s.layer [[
+        1 l.bmp#!
+        z" data/drunkcityb.layer-2.stm" l.zstm!
+    ]]
+    2 s.layer [[
+        1 l.bmp#!
+        z" data/drunkcityb.layer-3.stm" l.zstm!
+    ]]
+    3 s.layer [[
+        1 l.bmp#!
+        z" data/drunkcity.layer-4.stm" l.zstm!
+    ]]
+;scene
+
+7 scene: drunkcity1c
+    0 s.layer [[
+        1 l.bmp#!
+        z" data/drunkcity.layer-1.stm" l.zstm!
+	    z" data/drunkstreet.tiles.png" l.zbmp!
+    ]]
+    1 s.layer [[
+        1 l.bmp#!
+        z" data/drunkcityc.layer-2.stm" l.zstm!
+    ]]
+    2 s.layer [[
+        1 l.bmp#!
+        z" data/drunkcityc.layer-3.stm" l.zstm!
+    ]]
+    3 s.layer [[
+        1 l.bmp#!
+        z" data/drunkcity.layer-4.stm" l.zstm!
+    ]]
+;scene
+
+8 scene: drunkcity2c
+    0 s.layer [[
+        1 l.bmp#!
+        z" data/drunkcity.layer-1.stm" l.zstm!
+	    z" data/drunkstreet.tiles.png" l.zbmp!
+    ]]
+    1 s.layer [[
+        1 l.bmp#!
+        z" data/drunkcityc.layer-2.stm" l.zstm!
+    ]]
+    2 s.layer [[
+        1 l.bmp#!
+        z" data/drunkcityc.layer-3.stm" l.zstm!
+    ]]
+    3 s.layer [[
+        1 l.bmp#!
+        z" data/drunkcity.layer-4.stm" l.zstm!
+    ]]
+;scene
+
+9 scene: drunkcity3c
+    0 s.layer [[
+        1 l.bmp#!
+        z" data/drunkcity.layer-1.stm" l.zstm!
+	    z" data/drunkstreet.tiles.png" l.zbmp!
+    ]]
+    1 s.layer [[
+        1 l.bmp#!
+        z" data/drunkcityc.layer-2.stm" l.zstm!
+    ]]
+    2 s.layer [[
+        1 l.bmp#!
+        z" data/drunkcityc.layer-3.stm" l.zstm!
+    ]]
+    3 s.layer [[
+        1 l.bmp#!
+        z" data/drunkcity.layer-4.stm" l.zstm!
+    ]]
+;scene
+
