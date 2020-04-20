@@ -68,17 +68,28 @@ anim: call_right_a 10 , 11 , 12 , 12 , 12 , 12 , ;anim
     0e speed!
 ;
 
-: near?  dup if 's xy xy fdist 40e f<= then ;
+0e fvalue ftemp
+: near?  to ftemp  dup if 's xy xy fdist ftemp f<= then ;
+
+: ?win
+    car1 16e near? drunk1 40e near? and if win exit then
+;
 
 : z-logic
-    car1 near? drunk1 near? and if win exit then
     following? not if call then
+;
+
+: grapple
+    drunk1 dismiss
+    dir 11 become dir! start
 ;
 
 player :: think
 
     \ logic
+    ?win
     <z> pressed if z-logic then
+    <x> pressed if drunk1 24e near? if grapple exit then then
     
     state# case
         idle of idle-walk endof

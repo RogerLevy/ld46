@@ -33,7 +33,10 @@ value /sdata
 method start start!
 method think think!
 
-: become  ( n ) prefab me /objslot move ;
+: become  ( n ) >r
+    x y
+    r> prefab me /objslot move
+    y! x! ;
 
 : script  ( n - <name> )
     false to warnings?
