@@ -77,7 +77,7 @@ anim: lie_a           28 , 29 , ;anim
     adrenalin 0 = if sit exit then
     attention 1 = if
         *distraction*
-        2 rnd compliance!
+        3 rnd compliance!
         360e frnd dir! 0.6666e speed!
         false to following?
     else

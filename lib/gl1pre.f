@@ -283,7 +283,6 @@ screen game game
 : playloop  ( sample# - )
     smp  1e 0e 1e  ALLEGRO_PLAYMODE_LOOP   & sid  al_play_sample ;
 
-
 : stream ( zstr loopmode - )
     strm ?dup if al_destroy_audio_stream  0 to strm then
     over 0= if 2drop exit then
@@ -294,6 +293,8 @@ screen game game
     strm r> al_set_audio_stream_playmode drop
     strm mixer al_attach_audio_stream_to_mixer drop
 ;
+
+: streamloop  ALLEGRO_PLAYMODE_LOOP stream ;
 
 0e fvalue fgr  0e fvalue fgg  0e fvalue fgb  1e fvalue fga
 
