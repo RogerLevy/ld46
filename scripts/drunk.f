@@ -126,14 +126,14 @@ drunk :: think
 ;
 
 drunk :: debug
-    ." Adrenalin: " adrenalin . ." Attention: " attention .
+    ." Drenlin: " adrenalin . ." Attn: " attention . 
 ;
 
 drunk :: start
     me to drunk1
     360 rnd 180 + attention!
     500 rnd 500 + adrenalin!
-    0e angle!
+    0e angle!  90e dir!
     0e mbx! 24e mby! 16e mbw! 8e mbh!
     *start*
     1 lifetime!  \ avoid double sounds

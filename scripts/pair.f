@@ -5,6 +5,7 @@ prefab: pair
     include state.f
     fgetset dir dir!          \ angle (0=right,90=down...)
     fgetset speed speed!
+    fgetset stamina stamina!
 ;prefab
 
 anim: idle_down_a  4 , 6 , ;anim
@@ -48,8 +49,9 @@ anim: walk_right_a 0 , 1 , 2 , 3 , ;anim
 
 pair :: think
     \ logic
+    stamina 0e f<= if separate exit then
     do-state
-    car1 20e near? if win exit then
+    car1 30e near? if win exit then
     <x> pressed if separate exit then
     lifetime 60 mod 0= if 6 rnd 0= if *ramble* then then
  
@@ -64,6 +66,7 @@ pair :: think
     endcase
     
     lifetime 1 + lifetime!
+    stamina 0.25e f- stamina!
 ;
 
 pair :: start
@@ -72,4 +75,5 @@ pair :: start
     -16e ofsx! -32e ofsy!
     stop
     1 lifetime!  \ avoid double sounds
+    100e stamina!
 ;

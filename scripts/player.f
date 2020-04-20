@@ -72,7 +72,7 @@ anim: call_right_a 10 , 11 , 12 , 12 , 12 , 12 , ;anim
 : near?  to ftemp  dup if 's xy xy fdist ftemp f<= then ;
 
 : ?win
-    car1 16e near? drunk1 40e near? and if win exit then
+    car1 24e near? drunk1 40e near? and if win exit then
 ;
 
 : z-logic
@@ -114,4 +114,6 @@ player :: start
     me to player1
     0e mbx! 24e mby! 16e mbw! 8e mbh!
     ~sprex
+    90e dir!
+    stop
 ;
