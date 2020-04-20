@@ -92,7 +92,7 @@ anim: lie_a           28 , 29 , ;anim
         0 play
         drunk1 [[
             compliance 0 <> if
-                360 rnd 360 + attention!
+                360 rnd 180 + attention!
                 500 rnd 500 + adrenalin!
             then
         ]]
@@ -129,7 +129,7 @@ drunk :: debug
 
 drunk :: start
     me to drunk1
-    360 rnd 360 + attention!
+    360 rnd 180 + attention!
     500 rnd 500 + adrenalin!
     0e angle!
     0e mbx! 24e mby! 16e mbw! 8e mbh!

@@ -3019,7 +3019,7 @@ extern "C" void * al_get_win_window_handle( void * display );
 \ extern "C" al_have_d3d_non_pow2_texture_support( );
 \ extern "C" al_have_d3d_non_square_texture_support( );
 \ extern "C" al_have_opengl_extension( );
-\ extern "C" al_hide_mouse_cursor( );
+extern "C" void al_hide_mouse_cursor( void * display );
 extern "C" void al_hold_bitmap_drawing( int hold );
 \ extern "C" al_horizontal_shear_transform( );
 \ extern "C" al_identify_bitmap( );

@@ -15,6 +15,6 @@ include config
 
 include lib/gl1post
 export? [if] \ turnkey (save) breaks reloading
-    turnkey gamejam2020
+    turnkey "We're Gonna Walk Now"
 [then]  
 init

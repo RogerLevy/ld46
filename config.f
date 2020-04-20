@@ -6,6 +6,7 @@ require sprex.f
 ;
 
 : init-game
+    [ dev not ] [if] display al_hide_mouse_cursor [then]
     1 load
     \ 0 object as pair become start
 ;

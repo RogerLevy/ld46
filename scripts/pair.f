@@ -43,7 +43,7 @@ anim: walk_right_a 0 , 1 , 2 , 3 , ;anim
 pair :: think
     \ logic
     do-state
-    car1 16e near? if win then
+    car1 20e near? if win then
  
     \ physics
     dir speed fvec vy! vx!
@@ -57,7 +57,7 @@ pair :: think
 ;
 
 pair :: start
-    16e mbx! 56e mby! 16e mbw! 8e mbh!
+    0e mbx! 24e mby! 16e mbw! 8e mbh!
     ~sprex
     -16e ofsx! -32e ofsy!
     stop
