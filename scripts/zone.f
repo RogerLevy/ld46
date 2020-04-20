@@ -1,6 +1,6 @@
 prefab: zone
     fgetset radius radius!
-    48e radius!
+    64e radius!
 ;prefab
 
 0e fvalue ftemp
