@@ -51,7 +51,7 @@ pair :: think
     do-state
     car1 20e near? if win exit then
     <x> pressed if separate exit then
-    lifetime 60 mod 0= if 7 rnd 0= if *ramble* then then
+    lifetime 60 mod 0= if 6 rnd 0= if *ramble* then then
  
     \ physics
     dir speed fvec vy! vx!
@@ -71,4 +71,5 @@ pair :: start
     ~sprex
     -16e ofsx! -32e ofsy!
     stop
+    1 lifetime!  \ avoid double sounds
 ;
