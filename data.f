@@ -9,5 +9,7 @@
 8 z" data/bbq.zone.png" load-bitmap
 9 z" data/depot.zone.png" load-bitmap
 10 z" data/pizza.zone.png" load-bitmap
+11 z" data/end.png" load-bitmap
+
  
 0 z" data/hey.ogg" load-sample

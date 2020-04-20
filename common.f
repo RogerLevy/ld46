@@ -54,9 +54,19 @@ screen win
 : cprint  >r bif 0e 0e 0e 1e at@ 1 1 2+ 2s>f ALLEGRO_ALIGN_CENTER r@ al_draw_text
             bif 1e 1e 1e 1e at@ 2s>f ALLEGRO_ALIGN_CENTER r> al_draw_text ;
 
+0e fvalue counter
+0e fvalue throb
+: /throb  counter deg>rad fcos fnegate 2e f/ 0.5e f+ to throb 2e +to counter ;
+
+
 :while win update
     game-update
-    160 116 at zstr[ ." Made it!" ]zstr cprint    
+    finit
+    \ 160 116 at zstr[ ." Made it!" ]zstr cprint
+    0e 0e 320e 240e
+        0e 0e 0e 0.75e al_draw_filled_rectangle
+    /throb
+    11 bmp 160e 120e fover fover throb fdup 0e 0 al_draw_scaled_rotated_bitmap
 ;
 :while win step
     <enter> pressed if game 1 load then

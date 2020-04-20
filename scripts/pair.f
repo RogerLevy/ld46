@@ -40,10 +40,17 @@ anim: walk_right_a 0 , 1 , 2 , 3 , ;anim
     then
 ;
 
+: separate
+    dir 4 become dir! start
+    xy 3 one-object [[ xy! ]]
+;
+
+
 pair :: think
     \ logic
     do-state
-    car1 20e near? if win then
+    car1 20e near? if win exit then
+    <x> pressed if separate exit then
  
     \ physics
     dir speed fvec vy! vx!
