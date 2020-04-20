@@ -81,7 +81,7 @@ anim: lie_a           28 , 29 , ;anim
         360e frnd dir! 0.6666e speed!
         false to following?
     else
-        lifetime 120 mod 0= if 5 rnd 0= if *ramble* then then
+        lifetime 120 mod 0= if 6 rnd 0= if *ramble* then then
         attention 1 > focus 0<> and if
             close? if stop else chase then
         then
@@ -135,7 +135,7 @@ drunk :: start
     500 rnd 500 + adrenalin!
     0e angle!  90e dir!
     0e mbx! 24e mby! 16e mbw! 8e mbh!
-    *start* *joestart*
+    *start* 
     1 lifetime!  \ avoid double sounds
     walk
 ;    

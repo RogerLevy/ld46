@@ -69,7 +69,7 @@ create levels 1 , 5 , 9 , 4 , 8 , 3 , 7 , 2 , 6 ,
 
 :while win resume
     0e to counter
-    *end* *joeend*
+    *end*
 ;
 :while win update
     game-update
