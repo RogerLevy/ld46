@@ -2,7 +2,7 @@ require ld46-utils.f
 
 1 value nextid
 
-: one-object  ( prefab# - ) 
+: one-object  ( prefab# - object ) 
     max-objects 0 do
         i object [[ en not if
             become nextid id! 1 +to nextid

@@ -32,6 +32,7 @@ create levels 1 , 5 , 9 , 4 , 8 , 3 , 7 , 2 , 6 ,
 : load
     load
     max-objects 0 do i object [[ en if start then ]] loop
+    *start* 
 ;
 
 : next-level  level# 1 + 9 mod dup to level# cells levels + @ load ;

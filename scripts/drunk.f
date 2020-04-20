@@ -11,6 +11,8 @@ prefab: drunk
     getset compliance compliance!  \ 0 = non-compliant
 ;prefab
 
+synonym drunk-dir! dir!
+
 require lib/strout.f
 
 anim: idle_down_a     0 , ;anim
@@ -135,7 +137,6 @@ drunk :: start
     500 rnd 500 + adrenalin!
     0e angle!  90e dir!
     0e mbx! 24e mby! 16e mbw! 8e mbh!
-    *start* 
     1 lifetime!  \ avoid double sounds
     walk
 ;    
