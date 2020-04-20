@@ -67,7 +67,7 @@ screen win
 
 :while win resume
     0e to counter
-    *end*
+    *end* *joeend*
 ;
 :while win update
     game-update
