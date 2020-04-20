@@ -43,11 +43,13 @@ method think think!
 
 create temp$ 256 allot
 
-: changed  ( - <name> )
-  \  false to warnings?
+: changed  ( - <name> ) me >r
+    false to warnings?
     >in @ ' >body @ swap >in !
     s" scripts/" temp$ place  bl parse temp$ append  temp$ count GetPathSpec included
-; \    true to warnings? ;  
+    true to warnings?
+    r> as
+;  
 
 : load-prefabs
     z" prefabs.iol" ?dup if ?exist if

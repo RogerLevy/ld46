@@ -6,7 +6,8 @@ require sprex.f
 ;
 
 : init-game
-    1 load
+    \ 1 load
+    0 object as pair become start
 ;
 
 

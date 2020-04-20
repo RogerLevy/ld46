@@ -22,8 +22,7 @@ anim: call_right_a 10 , 11 , 12 , 12 , 12 , 12 , ;anim
 2 constant calling
 
 : dir-key-held?
-    <up> held <down> held <right> held <left> held or or or 
-;
+    <up> held <down> held <right> held <left> held or or or ;
 
 : kb>xdir  0e <right> held if 1e f+ then  <left> held if 1e f- then ;
 : kb>ydir  0e <down> held if 1e f+ then  <up> held if 1e f- then ;
