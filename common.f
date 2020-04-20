@@ -13,6 +13,7 @@ require soundcyclers.f
 to /OBJECT
 
 method debug debug!
+method trigger trigger!  ( object - )
 
 require tilecol.f  ( needs vx vy )
 

@@ -52,7 +52,7 @@ pair :: think
     stamina 0e f<= if separate exit then
     do-state
     car1 30e near? if win exit then
-    <x> pressed if separate exit then
+    <x> letgo if separate exit then
     lifetime 60 mod 0= if 6 rnd 0= if *ramble* then then
  
     \ physics

@@ -4,7 +4,8 @@ require objlib.f
 require common.f
 
 anew scripts
-: prefab: prefab:
+: prefab:
+    prefab:
     1e scalex! 1e scaley! \ all floats need to be initialized ...
     0e angle!
     0e ofsx! 0e ofsy!
@@ -27,6 +28,8 @@ anew scripts
 11 script scripts/pair       \ <--- depends on some player code
 5 script scripts/greencar
 6 script scripts/purplecar
+
+12 script scripts/zone
 7 script scripts/alleyzone
 8 script scripts/bbqzone
 9 script scripts/depotzone

@@ -39,6 +39,7 @@ method think think!
     y! x! ;
 
 : script  ( n - <name> )
+    dup prefab 's en abort" Prefab # already taken"
     false to warnings?
     include
     true to warnings?
@@ -46,7 +47,7 @@ method think think!
 
 create temp$ 256 allot
 
-: changed  ( - <name> ) me >r
+: hone  ( - <name> ) me >r
     false to warnings?
     >in @ ' >body @ swap >in !
     s" scripts/" temp$ place  bl parse temp$ append  temp$ count GetPathSpec included
