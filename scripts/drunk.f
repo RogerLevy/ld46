@@ -66,7 +66,7 @@ anim: lie_a           28 , 29 , ;anim
 ;
 
 
-:start sit 0e speed!  2 rnd compliance!  false to following? ;
+:start sit 0e speed!  2 rnd compliance!  false to following?  *sit* ;
 :step sit  ;
 
 :start walk
@@ -76,10 +76,12 @@ anim: lie_a           28 , 29 , ;anim
 :step walk
     adrenalin 0 = if sit exit then
     attention 1 = if
+        *distraction*
         2 rnd compliance!
         360e frnd dir! 0.6666e speed!
         false to following?
     else
+        lifetime 60 mod 0= if 7 rnd 0= if *ramble* then then
         attention 1 > focus 0<> and if
             close? if stop else chase then
         then
@@ -134,4 +136,5 @@ drunk :: start
     0e angle!
     0e mbx! 24e mby! 16e mbw! 8e mbh!
     walk
+    *start*
 ;    

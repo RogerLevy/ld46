@@ -1,5 +1,6 @@
 require sprex.f
 require lib/strout.f
+require soundcyclers.f
 
 /OBJECT
     fgetset vx vx!
@@ -19,12 +20,17 @@ require tilecol.f  ( needs vx vy )
 0 value drunk1
 0 value car1
 0 value following?
+0 value level#
 
+create levels 1 , 5 , 9 , 4 , 8 , 3 , 7 , 2 , 6 ,
 
 : load
     load
     max-objects 0 do i object [[ en if start then ]] loop
 ;
+
+: next-level  level# 1 + 9 mod dup to level# cells levels + @ load ;
+
 
 : game-update
     2x cls
@@ -58,7 +64,10 @@ screen win
 0e fvalue throb
 : /throb  counter deg>rad fcos fnegate 2e f/ 0.5e f+ to throb 2e +to counter ;
 
-
+:while win resume
+    0e to counter
+    *end*
+;
 :while win update
     game-update
     finit
@@ -69,8 +78,5 @@ screen win
     11 bmp 160e 120e fover fover throb fdup 0e 0 al_draw_scaled_rotated_bitmap
 ;
 :while win step
-    <enter> pressed if game 1 load then
+    <enter> pressed if next-level game then
 ;
-
-
-

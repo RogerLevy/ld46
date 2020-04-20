@@ -51,6 +51,7 @@ pair :: think
     do-state
     car1 20e near? if win exit then
     <x> pressed if separate exit then
+    lifetime 60 mod 0= if 7 rnd 0= if *ramble* then then
  
     \ physics
     dir speed fvec vy! vx!
@@ -61,6 +62,8 @@ pair :: think
         idle of idle-animation endof
         walking of walk-animation endof
     endcase
+    
+    lifetime 1 + lifetime!
 ;
 
 pair :: start

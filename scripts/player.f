@@ -80,6 +80,7 @@ anim: call_right_a 10 , 11 , 12 , 12 , 12 , 12 , ;anim
 ;
 
 : grapple
+    *grab*
     drunk1 dismiss
     dir 11 become dir! start
 ;
