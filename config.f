@@ -8,8 +8,9 @@ require sprex.f
 : init-game
     z" data/BGM/alritebgm.ogg" streamloop
     [ dev not ] [if] display al_hide_mouse_cursor [then]
-    1 load
+    \ 1 load
     \ 0 object as pair become start
+    title
 ;
 
 

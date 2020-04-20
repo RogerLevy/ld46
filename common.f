@@ -2,6 +2,10 @@ require sprex.f
 require lib/strout.f
 require soundcyclers.f
 
+defer call-msg  ' noop is call-msg
+screen win
+screen title
+
 /OBJECT
     fgetset vx vx!
     fgetset vy vy!
@@ -56,8 +60,6 @@ create levels 1 , 5 , 9 , 4 , 8 , 3 , 7 , 2 , 6 ,
     bgp4 [[ draw-as-tilemap ]]
 ;
 
-screen win
-
 : cprint  >r bif 0e 0e 0e 1e at@ 1 1 2+ 2s>f ALLEGRO_ALIGN_CENTER r@ al_draw_text
             bif 1e 1e 1e 1e at@ 2s>f ALLEGRO_ALIGN_CENTER r> al_draw_text ;
 
@@ -80,4 +82,14 @@ screen win
 ;
 :while win step
     <enter> pressed if next-level game then
+;
+
+:while title resume
+;
+:while title update
+    12 bmp 0e 0e 0 al_draw_bitmap
+;
+:while title step
+    2x
+    <enter> pressed if -1 to level# next-level game then
 ;
