@@ -45,7 +45,7 @@ anim: walk_right_a 0 , 1 , 2 , 3 , ;anim
     dir 4 become start dir! 
     xy 3 one-object dup >r [[ xy! start ]]
     dir 180e f+ 360e fmod r> [[ drunk-dir! 0 attention!
-        *distraction* ]]
+        *distraction* false to following? ]]
 ;
 
 
