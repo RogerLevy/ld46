@@ -12,9 +12,7 @@ anew scripts
     0e vx! 0e vy!
     0e mbx! 0e mby!
     16e mbw! 16e mbh!
-    /userfields
 ;
-: ;prefab drop ;
 
 : do-collisions
     bgp3 do-tilemap-physics

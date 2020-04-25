@@ -1,6 +1,8 @@
 prefab: drunk
     $0100 attr!  \ 16x32 sprite
     3 bmp#!
+;prefab
+ext:
     include anim.f
     include state.f 
     fgetset dir dir!          \ angle (0=right,90=down...)
@@ -9,7 +11,7 @@ prefab: drunk
     getset adrenalin adrenalin!
     getset attention attention!
     getset compliance compliance!  \ 0 = non-compliant
-;prefab
+;ext
 
 synonym drunk-dir! dir!
 

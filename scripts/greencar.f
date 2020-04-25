@@ -2,8 +2,10 @@ prefab: greencar
     $0001 attr!  \ 32x16 sprite
     6 bmp#!
     ~sprex
-    getset state# state#!        
 ;prefab
+ext:
+    getset state# state#!        
+;ext
 
 greencar :: start
     me to car1

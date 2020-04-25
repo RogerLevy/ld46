@@ -1,12 +1,15 @@
 prefab: pair
     $0502 attr!
     5 bmp#!
+;prefab
+ext:
     include anim.f
     include state.f
     fgetset dir dir!          \ angle (0=right,90=down...)
     fgetset speed speed!
     fgetset stamina stamina!
-;prefab
+;ext
+
 
 anim: idle_down_a  4 , 6 , ;anim
 anim: idle_up_a    8 , 10 , ;anim

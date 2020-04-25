@@ -1,11 +1,13 @@
 prefab: player
     $0100 attr!  \ 16x32 sprite
     4 bmp#!
+;prefab
+ext:
     include anim.f
     getset state# state#!        
     fgetset dir dir!          \ angle (0=right,90=down...)
     fgetset speed speed!
-;prefab
+;ext
 
 anim: idle_down_a 0 , ;anim
 anim: idle_up_a 1 , ;anim
@@ -72,7 +74,7 @@ anim: call_right_a 10 , 11 , 12 , 12 , 12 , 12 , ;anim
 : near?  to ftemp  dup if 's xy xy fdist ftemp f<= then ;
 
 : ?win
-    car1 24e near? drunk1 40e near? and if win exit then
+    car1 24e near? drunk1 40e near? and following? and if win exit then
 ;
 
 : z-logic

@@ -1,7 +1,9 @@
 prefab: lemming
     224 ix! 0 iy!
-    include anim.f
 ;prefab
+ext:
+    include anim.f
+;ext
 
 anim: walk_a 15 , 14 , 13 , 12 , 11 , 10 , 9 , 8 , ;anim
 

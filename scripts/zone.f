@@ -1,7 +1,9 @@
 prefab: zone
+;prefab
+ext:
     fgetset radius radius!
     64e radius!
-;prefab
+;ext
 
 0e fvalue ftemp
 : near?  to ftemp  dup if 's xy xy fdist ftemp f<= then ;

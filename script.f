@@ -4,7 +4,7 @@
     getset objtype objtype!
 to /OBJECT
 
-128 constant /userfields
+/objslot 128 - constant /userfields
 
 max-prefabs /objslot array prefab
 max-prefabs 1024 array sdata  \ static data such as actions
@@ -20,6 +20,9 @@ max-prefabs 1024 array sdata  \ static data such as actions
 ;
 
 : ;prefab ]] ;
+
+: ext: /userfields ;
+: ;ext ;
 
 32  \ name (1+31)
 value /sdata
