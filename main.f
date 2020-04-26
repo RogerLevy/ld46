@@ -15,6 +15,6 @@ include config
 
 include lib/gl1post
 export? [if] \ turnkey (save) breaks reloading
-    turnkey "We're Gonna Walk Now"
+    turnkey "Alright, We're Gonna Walk Now..."
 [then]  
 init
