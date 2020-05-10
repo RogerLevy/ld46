@@ -1,11 +1,12 @@
 require sprex.f
 
-: load-data
+
+: load-data  \ called at startup
     s" data.f" included
     s" scenes.f" included
 ;
 
-: init-game
+: init-game  \ called at startup after load-data; "soft reset"
     z" data/BGM/alritebgm.ogg" streamloop
     [ dev not ] [if] display al_hide_mouse_cursor [then]
     \ 1 load
@@ -14,7 +15,7 @@ require sprex.f
 ;
 
 
-:while game update
+:while game update   \ called once a frame to draw graphics
     game-update
     
     [ dev ] [if]
@@ -22,7 +23,7 @@ require sprex.f
     [then]
 ;
 
-:while game step
+:while game step     \ called once a frame to move objects
     finit
     max-objects 0 do
         i object [[ en if

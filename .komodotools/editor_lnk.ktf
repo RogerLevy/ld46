@@ -1,5 +1,5 @@
-// komodo tool: editor [F9]
-// ========================
+// komodo tool: editor.lnk
+// =======================
 // cwd: %p
 // doNotOpenOutputWindow: 0
 // insertOutput: 0
@@ -7,9 +7,10 @@
 // keyboard_shortcut: F9
 // operateOnSelection: 0
 // parseOutput: 0
+// parseRegex: 0
 // runIn: new-console
 // showParsedOutputList: 0
 // type: command
 // version: 1.1.5
-// ========================
-editor [F9]
+// =======================
+editor.lnk

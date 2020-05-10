@@ -3,7 +3,7 @@
     al_uninstall_system
 ;
 : empty  shutdown empty ;
-: go
+: go   \ The main loop
     kbs0 /ALLEGRO_KEYBOARD_STATE erase
     kbs1 /ALLEGRO_KEYBOARD_STATE erase
     al_uninstall_keyboard  al_install_keyboard drop

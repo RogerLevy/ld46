@@ -1,3 +1,5 @@
+( --~~ Common Game-specific Extensions ~~-- )
+
 require sprex.f
 require lib/strout.f
 require soundcyclers.f

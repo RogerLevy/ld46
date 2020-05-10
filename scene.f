@@ -2,6 +2,7 @@ require lib/filelib.f
 require ld46-utils.f
 require lib/a.f
 
+( Define tilemap planes )
 256 256 plane: bgp1 1 tm.bmp#! ;plane
 256 256 plane: bgp2 1 tm.bmp#! ;plane
 256 256 plane: bgp3 1 tm.bmp#! ;plane
@@ -9,6 +10,8 @@ require lib/a.f
 create bgplanes bgp1 , bgp2 , bgp3 , bgp4 ,
 : bgp  cells bgplanes + @ ;
 
+
+( Define array for tile attributes; not used in LD46 )
 1024 cells constant /tileattrs 
 
 create tiledata /tileattrs lenof bitmap * /allot
@@ -48,7 +51,7 @@ constant /SCENE
     dup zcount file-exists not if cr zcount type ."  not found" 0 else 1 then
 ;
 
-: load-stm ( zstr tilemap -- )
+: load-stm ( zstr tilemap -- )  \ Load simple tilemap
     [[ ?dup if ?exist if r/o[ 
         0 sp@ 4 read drop
         0 sp@ 2 read ( w ) dup tm.cols! cells tm.stride!
@@ -57,7 +60,7 @@ constant /SCENE
     ]file then then ]] 
 ;
 
-: create-stm ( cols rows zstr -- )
+: create-stm ( cols rows zstr -- )  \ Create new simple tilemap
     newfile[
         s" STMP" write
         over sp@ 2 write drop
@@ -67,13 +70,13 @@ constant /SCENE
     ]file
 ;
 
-: load-iol ( zstr -- )
+: load-iol ( zstr -- )  \ Load initial object list
     ?dup if ?exist if r/o[
         0 object bytes-left read 
     ]file then then
 ;
 
-: save-iol ( zstr -- )
+: save-iol ( zstr -- )  \ Save initial object list
     newfile[
         0 object  [ lenof object /objslot * ]#  write
     ]file 
@@ -81,11 +84,11 @@ constant /SCENE
 
 : clear-tilemap  ( tilemap -- )
     [[ tm.base  tm.dims * cells  erase  ]] ;
-
+ 
 : clear-objects  ( -- )
     0 object  [ lenof object /objslot * ]# erase ;
 
-: scene:  ( i - <name> ) ( - n )
+: scene:  ( i - <name> ) ( - n )  \ Define scene
     >in @ >r
     dup constant scene [[
     r> >in ! bl parse s>z s.zname!
@@ -98,7 +101,7 @@ constant /SCENE
 : iol-path  ( scene ) z" data/levels/" z$ swap 's s.zname z+  +z" .iol" ;
 : tad-path  ( layer ) 's l.zbmp zcount 4 - s>z +z" .tad" ;
 
-: load  ( n )
+: load  ( n )  \ Load scene
     scene [[
         4 0 do i s.layer [[
             l.tw l.th i bgp [[ tm.th! tm.tw! ]]

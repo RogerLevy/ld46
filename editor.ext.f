@@ -1,3 +1,5 @@
+( --~~ Game-specific extensions for the editor ~~-- )
+
 require sprex.f
 
 :noname

@@ -4,10 +4,10 @@ finit
 
 \ ------------------------------------------------------------------------
 
-0 value dev
-0 value fullscreen
-0 value mswin
-0 value export?
+0 value dev                   \ Enables some development-time features
+0 value fullscreen            \ Enables fullscreen
+0 value mswin                 \ Microsoft Windows export
+0 value export?               \ Enables export after compile; note game can't be reloaded after export
 
 :noname
     CommandLine 2drop
@@ -40,6 +40,8 @@ require lib/fclean.f
 320 value vieww
 240 value viewh
 0 value display
+
+( Allegro stuff: )
 create kbs0 /ALLEGRO_KEYBOARD_STATE allot&erase
 create kbs1 /ALLEGRO_KEYBOARD_STATE allot&erase
 create ms0 /ALLEGRO_MOUSE_STATE allot&erase
@@ -51,15 +53,24 @@ create mi /ALLEGRO_MONITOR_INFO allot&erase
 0 value queue
 create alevt 256 allot&erase
 0 value bif  \ builtin font
+
 0 value mousex
 0 value mousey
 0 value mwheelx
 0 value mwheely
 
+( Default "hooks" )
 : load-data ;
 : init-game ;
 : system    ;
 
+(( Screen system
+
+Lets you define multiple screens.  For instance title screen, menus, main game,
+bonus games, cutscenes, ending, credits, etc etc.  Each screen has hooks that
+are called at certain times, defined using :WHILE .
+
+))
 0 value scr
 
 : execute  ?dup if execute then ;
@@ -82,6 +93,9 @@ value /screen
 
 : :while   ( - <screen> <hook> code; )
     :noname ' >body ' >body @ + ! ;
+
+
+( --~~ Allegro startup ~~-- )
 
 : -audio
     mixer 0= if exit then
@@ -139,15 +153,17 @@ value /screen
 
 ( -------------------------------------------------------------- )
 
+( Utilities for working with Allegro events )
+
 : etype  ( - ALLEGRO_EVENT_TYPE )  alevt ALLEGRO_EVENT.type @ ;
 : keycode  alevt KEYBOARD_EVENT.keycode @ ;
 : unichar  alevt KEYBOARD_EVENT.unichar @ ;
 
 \ --------------------------------------------------------------
 
+( --~~ RNG ~~-- )
+
 variable bud
-
-
 : sfrand randseed @  3141592621 *  1+  DUP randseed ! ;
   also system  assign sfrand to-do RANDOM  previous
 
@@ -160,8 +176,12 @@ synonym /allot allot&erase
 synonym gild freeze
 synonym & addr immediate
 
-( --== circular stack ==-- )
-( expects length to be power of 2 )
+\ --------------------------------------------------------------
+
+( --== circular stack and arrays ==-- )
+
+( the length of stacks and arrays ought to be a power of 2. )
+
 : stack  ( length - <name> ) create 0 , dup 1 - ,  cells /allot ;
 : (wrap)  cell+ @ and ;
 : >tos  dup @ cells swap cell+ cell+ + ;
@@ -178,6 +198,23 @@ synonym & addr immediate
 : array  ( #items itemsize ) create dup , over 1 - , * /allot
          ( i - adr ) does> >r r@ (wrap) r@ @ * r> cell+ cell+ + ;
 
+\ --------------------------------------------------------------
+
+( --~~ Object System ~~-- )
+
+((
+Rather than conventional struct fields we use implicit base addresses.
+The current object is kept track of by a value called ME.
+A word called 'S can be used to work on objects placed on the stack.
+But generally we work with the current object.  It's a lot more convenient
+for programming/scripting game objects. (Player, enemies, projectiles, etc)
+
+FGETSET ( ofs - <name> <name!> ofs+cell )  get: ( - F: n ) set: ( F: n - )
+GETSET  ( ofs - <name> <name!> ofs+cell )  get: ( - n ) set: ( n - )
+FIELD   ( ofs size - <name> ofs+size )  ( - adr )
+FIELD[] ( ofs n size - <name> ofs )     ( n - adr )
+ZGETSET ( ofs size - <name> <name!> ofs+size )  get: ( - zadr ) set: ( zadr - )
+))
 
 0 value me
 : (fgetter)  ( ofs - <name> ofs ) create dup , does> @ me + sf@ ;
@@ -194,16 +231,24 @@ synonym & addr immediate
 : (zsetter)  ( ofs size - <name> ofs size ) create over , does> @ me + zmove ;
 : zgetset  (zgetter) (zsetter) + ;
 
+((
+Save and restore ME using a circular stack with [[ and ]].  [[ also sets ME to
+  the given object.
+Set ME conveniently with AS.
+Use 'S on the object on the stack like so:  <object> 'S <word>  (any word works)
+))
+
 16 stack objstack
-: [[  me objstack push to me ;
-: ]]  objstack pop to me ;
-: as  to me ;
-: 's
+: [[  ( obj - ) me objstack push to me ;
+: ]]  ( - ) objstack pop to me ;
+: as  ( obj - ) to me ;
+: 's  ( ... obj - <word> ... ) 
     state @ if  s" me >r to me" evaluate bl parse evaluate s" r> to me" evaluate exit then   
     s" [[" evaluate bl parse evaluate s" ]]" evaluate ; immediate
     
-    
 \ --------------------------------------------------------------
+
+( --~~ Game objects ~~-- )
 
 0
     fgetset x x!  \ x pos
@@ -228,8 +273,10 @@ max-objects /objslot array object
 screen game game
 0 object to me
 
-: btn  kbs0 swap al_key_down ;
 
+\ --------------------------------------------------------------
+
+( --~~ Bitmaps ~~-- )
 128 cell array bitmap
 : bmp  bitmap @ ;
 : bmp! bitmap ! ;
@@ -252,27 +299,10 @@ screen game game
     else drop drop then
 ;
 
+
+( --~~ Audio ~~-- )
 256 cell array sample
 : smp  sample @ ;
-
-: -bitmap  ?dup if al_destroy_bitmap then ;
-: -sample  ?dup if al_destroy_sample then ;
-
-: destroy-bitmaps
-    [ lenof bitmap ]# 0 do i bitmap @ -bitmap loop
-;
-
-: destroy-samples
-    [ lenof sample ]# 0 do i sample @ -sample loop
-;
-
-: deinit
-    destroy-bitmaps
-    destroy-samples
-;
-
-: load-bitmap  ( n zpath - ) swap bitmap swap ?loadbmp ;
-: load-sample  ( n zpath - ) swap sample swap ?loadsmp ;
 
 0 value sid
 0 value strm
@@ -295,6 +325,24 @@ screen game game
 ;
 
 : streamloop  ALLEGRO_PLAYMODE_LOOP stream ;
+
+
+( --~~ Asset management ~~-- )
+: -sample  ?dup if al_destroy_sample then ;
+: -bitmap  ?dup if al_destroy_bitmap then ;
+: destroy-bitmaps  [ lenof bitmap ]# 0 do i bitmap @ -bitmap loop ;
+: destroy-samples  [ lenof sample ]# 0 do i sample @ -sample loop ;
+
+: deinit
+    destroy-bitmaps
+    destroy-samples
+;
+
+: load-bitmap  ( n zpath - ) swap bitmap swap ?loadbmp ;
+: load-sample  ( n zpath - ) swap sample swap ?loadsmp ;
+
+
+( --~~ Rendering support ~~-- )
 
 0e fvalue fgr  0e fvalue fgg  0e fvalue fgb  1e fvalue fga
 
@@ -331,6 +379,8 @@ matrix m
 ;
 
 ( -------------------------------------------------------------- )
+
+( --~~ Tilemap support ~~-- )
 
 ( tile format: 000000vh 00000000 nnnnnnnn nnnnnnnn )
 ( -1 or $FFFFFFFF means transparent, i.e. a blank space )
@@ -375,6 +425,27 @@ constant /TILEMAP
 : tm-vrows  tm.h tm.th f/ f>s 1 + ;
 : tm-vcols  tm.w tm.tw f/ f>s 1 + ;
 
+((
+Draw a tilemap
+
+A tilemap is a 2D array of indices into a tileset, which is a bitmap divided
+into rectangles of graphics called tiles that can be placed in a grid called
+the tilemap.
+
+DRAW-AS-TILEMAP requires ME to be set to a tilemap object, which reuses some
+props of game objects and has a few of its own.
+
+X and Y are the origin for drawing
+TM.BMP# defines the bitmap used for the tileset
+TM.BASE defines the base address of the tilemap (just an array of cells)
+TM.STRIDE defines the stride per row in bytes
+If TM.BMP# refers to a null bitmap in the bitmap table, early out
+If TM.BASE is null, early out
+TM.W/H define a rectangle that rendering will be constrained to
+TM.TW/TH define the size of individual tiles in the tileset
+TM.SCROLLX/Y enable smooth scrolling - it's essential that TM.TW and TM.TH are non-zero for this
+))
+
 : draw-as-tilemap  ( - )
     tm.bmp# bmp
     0 locals| t b |
@@ -382,7 +453,7 @@ constant /TILEMAP
     tm.base 0 = if exit then
     b al_get_bitmap_width tm.tw f>s / to tcols
     
-    1 al_hold_bitmap_drawing
+    1 al_hold_bitmap_drawing       \ big speedup due to batched rendering
     x zoom f* f>s y zoom f* f>s
         tm.w zoom f* f>s tm.h zoom f* f>s
         al_set_clipping_rectangle
@@ -436,11 +507,22 @@ constant /TILEMAP
 
 \ ---------------------------------------------------------------
 
-:while game update
+:while game update   \ Default game renderer
     2x 0e 0e 0e color cls draw-sprites
 ;
 
 \ ---------------------------------------------------------------
+
+((
+Development-specific stuff
+
+On windows,
+    load benchmarking tool TIME?
+    automatically switch window focus appropriately
+    store the file paths of loaded bitmaps in an array
+    support detecting changed assets
+))
+
 dev [if]
     mswin [if] include counter [then]
     
@@ -471,3 +553,5 @@ dev [if]
     ;
 [then]
 
+( ? )
+: btn  kbs0 swap al_key_down ;
