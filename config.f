@@ -15,19 +15,3 @@ require sprex.f
 ;
 
 
-:while game update   \ called once a frame to draw graphics
-    game-update
-    
-    [ dev ] [if]
-        0 0 at zstr[ 0 object 's debug ]zstr print
-    [then]
-;
-
-:while game step     \ called once a frame to move objects
-    finit
-    max-objects 0 do
-        i object [[ en if
-            think  x vx f+ x!  y vy f+ y!
-        then ]]
-    loop
-;

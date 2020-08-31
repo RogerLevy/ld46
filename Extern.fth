@@ -546,7 +546,7 @@ $000A constant RTLD_NOW_GLOBAL	\ -- x
 ;
 
 : topLib	\ libstr --
-\ *G Make the library structure the top/first in the library
+\ *G Make the library structure the to/pfirst in the library
 \ ** search order.
   lib-link  2dup delLink  AddLink  ;
 
@@ -585,7 +585,7 @@ previous definitions
 \ *P The first word is the library definition itself, which
 \ ** behaves in the normal VFX Forth way, returning its load
 \ ** address or zero if not loaded. The second word forces
-\ ** the library to be top/first in the library search order.
+\ ** the library to be to/pfirst in the library search order.
 \ ** Thanks to Roelf Toxopeus.
 
 \ *P As of OSX 10.7, *\fo{FRAMEWORK} (actually *\b{dlopen()})
@@ -931,12 +931,12 @@ variable /ForthFrame		\ number of bytes taken from Forth stack
 \ 11) Restore the Forth stack
 \ 12) Restore Forth registers
 
-2 cells constant /PSPextend	\ -- u
+2 cells constant /pSPextend	\ -- u
 \ The number of bytes by which the Forth stack is dropped to
 \ extend it. The high cell contains the cached TOS. The bottom
 \ cell (offset 0) contains the saved ESP.
 \ MUST BE at least the size of a LongLong.
-/PSPextend cell - constant /PSPtos	\ -- u
+/pSPextend cell - constant /pSPtos	\ -- u
 \ The offset from the dropped Forth stack to the cell containing
 \ TOS.
 
@@ -968,7 +968,7 @@ variable /ForthFrame		\ number of bytes taken from Forth stack
       BOOLtype of  -ReturnForth  endof
     endcase
   endif
-  /PSPextend +				\ frame overhead, >= largest return type
+  /pSPextend +				\ frame overhead, >= largest return type
 ;
 
 : ^efn		\ -- addr
@@ -1026,9 +1026,9 @@ previous definitions
     push  esi				\ Win: required
     push  edi
 \ preserve ESP and TOS
-    lea   ebp, /PSPextend ( 8 ) negate [ebp]	\ save EBX and ESP
+    lea   ebp, /pSPextend ( 8 ) negate [ebp]	\ save EBX and ESP
     mov   0 [ebp], esp			\ after call, ESP will be restored
-    mov   /PSPtos ( 4 ) [ebp], ebx	\ save TOS, easier from memory if double
+    mov   /pSPtos ( 4 ) [ebp], ebx	\ save TOS, easier from memory if double
   a] [a]
   FrameAlignment if
     \ make a frame on ESP and align it to OS convention, 16 byte aligned less 4 bytes
@@ -1049,7 +1049,7 @@ previous definitions
 : generateCall	\ --
 \ Lay the code to call the external function, and clean up.
   [a
-\ Call external C/PASCAL proc
+\ Call external C/pASCAL proc
     cld
     call  ^efn []			\ indirect through pointer
     cld
@@ -1134,9 +1134,9 @@ previous definitions
 
 : offsets	\ ^ai -- srcoff destoff
 \ Extract the base offsets from the structure. The source offset
-\ is assumed to be on the PSP/EBP stack and is adjusted to be based
+\ is assumed to be on the PS/pEBP stack and is adjusted to be based
 \ from the saved TOS.
-  dup ai.PSPoff @ /PSPtos +  swap ai.FrameOff @
+  dup ai.PSPoff @ /pSPtos +  swap ai.FrameOff @
 ;
 
 : CopySINT	\ ^ai --
@@ -1220,7 +1220,7 @@ previous definitions
 
 : restoreTOS	\ --
 \ For void and float return values, TOS must be restored.
-  [a  mov  ebx,  a]  /PSPtos /ForthFrame @ +  [a [EBP] a] [a]
+  [a  mov  ebx,  a]  /pSPtos /ForthFrame @ +  [a [EBP] a] [a]
 ;
 
 : retLongLongF	\ --
@@ -3005,7 +3005,7 @@ previous previous definitions
 \ ** pointer (void * this). Because exported VC++ member
 \ ** functions can have either C or "PASCAL" styles, the this
 \ ** pointer must be positioned so that it is leftmost when
-\ ** reversed (C/PASCAL/WINAPI/StdCall/APIENTRY style) or is
+\ ** reversed (C/pASCAL/WINAPI/StdCall/APIENTRY style) or is
 \ ** rightmost when not reversed ("PASCAL" style).
 
 \ *E extern: PASCAL VC++ BOOL GetHello( void * this, char * buff, int len );

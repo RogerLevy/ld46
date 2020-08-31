@@ -5,8 +5,8 @@ prefab: drunk
 ext:
     include anim.f
     include state.f 
-    fgetset dir dir!          \ angle (0=right,90=down...)
-    fgetset speed speed!
+    pgetset dir dir!          \ angle (0=right,90=down...)
+    pgetset speed speed!
     getset flail flail!      \ flail selector
     getset adrenalin adrenalin!
     getset attention attention!
@@ -33,10 +33,10 @@ anim: sitting_right_a 23 , 24 , ;anim
 anim: lie_a           28 , 29 , ;anim
 
 : ?animate  ( speed up down left right -- )
-    dir f>s 45 135  within? if drop drop nip animate exit then
-    dir f>s 225 315 within? if drop drop drop animate  exit then
-    dir f>s 45 < dir f>s 315 > or if nip nip nip animate  0 flip!  exit then
-    dir f>s 135 225 within? if drop nip nip animate  1 flip!  then
+    dir p>s 45 135  within? if drop drop nip animate exit then
+    dir p>s 225 315 within? if drop drop drop animate  exit then
+    dir p>s 45 < dir p>s 315 > or if nip nip nip animate  0 flip!  exit then
+    dir p>s 135 225 within? if drop nip nip animate  1 flip!  then
 ;
 
 0 state: stop idle    
@@ -45,23 +45,23 @@ anim: lie_a           28 , 29 , ;anim
 3 state: konk unconscious 
 4 state: fall falling 
 
-: idle-animation  0e idle_up_a idle_down_a idle_right_a idle_right_a  ?animate ;
-: walk-animation  1e 12e f/ walk_up_a walk_down_a walk_right_a walk_right_a  ?animate ;
-: waddle-animation  1e 12e f/ waddle_up_a waddle_down_a waddle_right_a waddle_right_a   ?animate ;
-: lie-animation  1e 12e f/ lie_a animate ;
-: sitting-animation  1e 12e f/ sitting_down_a sitting_down_a sitting_right_a sitting_right_a ?animate ;
-: fall-animation  0e fall_down_a fall_down_a fall_right_a fall_right_a  ?animate ;
+: idle-animation  0 idle_up_a idle_down_a idle_right_a idle_right_a  ?animate ;
+: walk-animation  1 12 p/ walk_up_a walk_down_a walk_right_a walk_right_a  ?animate ;
+: waddle-animation  1 12 p/ waddle_up_a waddle_down_a waddle_right_a waddle_right_a   ?animate ;
+: lie-animation  1 12 p/ lie_a animate ;
+: sitting-animation  1 12 p/ sitting_down_a sitting_down_a sitting_right_a sitting_right_a ?animate ;
+: fall-animation  0 fall_down_a fall_down_a fall_right_a fall_right_a  ?animate ;
 
 : focus     player1 ;
-: distance  's xy xy fdist ;
-: close?    focus distance 35e f< ;
-: chase     focus 's xy  xy  2f-  fangle dir! 0.6666e speed!  true to following?  ;
+: distance  's xy xy pdist ;
+: close?    focus distance 35 p < ;
+: chase     focus 's xy  xy  2-  pangle dir! 1 3 p/ speed!  true to following?  ;
 : deplete
     attention 1 - 0 max attention!
     adrenalin 1 - 0 max adrenalin!
 ;
 
-:start stop 0e speed! ;
+:start stop 0 speed! ;
 :step stop
     attention 1 > focus 0<> and if
         close? not if chase walk then
@@ -70,7 +70,7 @@ anim: lie_a           28 , 29 , ;anim
 ;
 
 
-:start sit 0e speed!  2 rnd compliance!  false to following?  *sit* ;
+:start sit 0 speed!  2 rnd compliance!  false to following?  *sit* ;
 :step sit  ;
 
 :start walk
@@ -82,7 +82,7 @@ anim: lie_a           28 , 29 , ;anim
     attention 1 = if
         *distraction*
         3 rnd compliance!
-        360e frnd dir! 0.6666e speed!
+        360 p rnd dir! 1 3 p/ speed!
         false to following?
     else
         lifetime 120 mod 0= if 6 rnd 0= if *ramble* then then
@@ -94,7 +94,7 @@ anim: lie_a           28 , 29 , ;anim
 ;
 
 :noname 
-    drunk1 [[ attention 0 = adrenalin 0 = or ]] if
+    drunk1 [[ attention 0= adrenalin 0= or ]] if
         *joeyell*
         drunk1 [[
             compliance 0 <> if
@@ -106,19 +106,18 @@ anim: lie_a           28 , 29 , ;anim
 ; is call-msg
 
 drunk :: think
-    
     \ logic
     do-state
 
     \ physics
-    dir speed fvec vy! vx!
+    dir speed pvec vy! vx!
     do-collisions    
     
     \ animation
     state# case
         idle of idle-animation endof
         walking of
-            lifetime 30 mod 0 = if 5 rnd flail! then
+            lifetime 30 mod 0= if 5 rnd flail! then
             flail 2 >= if walk-animation else waddle-animation then
         endof
         sitting of sitting-animation endof
@@ -137,8 +136,8 @@ drunk :: start
     me to drunk1
     360 rnd 180 + attention!
     500 rnd 500 + adrenalin!
-    0e angle!  90e dir!
-    0e mbx! 24e mby! 16e mbw! 8e mbh!
+    0 p angle!  90 p dir!
+    0 p mbx! 24 p mby! 16 p mbw! 8 p mbh!
     1 lifetime!  \ avoid double sounds
     walk
 ;    

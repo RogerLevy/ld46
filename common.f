@@ -3,19 +3,20 @@
 require sprex.f
 require lib/strout.f
 require soundcyclers.f
+require fixy.f
 
 defer call-msg  ' noop is call-msg
 screen win
 screen title
 
 /OBJECT
-    fgetset vx vx!
-    fgetset vy vy!
+    pgetset vx vx!
+    pgetset vy vy!
     getset lifetime lifetime!
-    fgetset mbx mbx!
-    fgetset mby mby!
-    fgetset mbw mbw!
-    fgetset mbh mbh!
+    pgetset mbx mbx!
+    pgetset mby mby!
+    pgetset mbw mbw!
+    pgetset mbh mbh!
 to /OBJECT
 
 method debug debug!
@@ -33,7 +34,10 @@ create levels 1 , 5 , 9 , 4 , 8 , 3 , 7 , 2 , 6 ,
 
 : load
     load
-    max-objects 0 do i object [[ en if start then ]] loop
+    fix-objects
+    max-objects 0 do
+        i object [[ en if start then ]]
+    loop
     *start* 
 ;
 
@@ -44,17 +48,17 @@ create levels 1 , 5 , 9 , 4 , 8 , 3 , 7 , 2 , 6 ,
     2x cls
 
     1 object [[
-        x floor 160e f- 0e fmax  y floor 120e f- 0e fmax
-        fover fover    bgp1 [[ tm.scrolly! tm.scrollx! ]]
-        fover fover    bgp2 [[ tm.scrolly! tm.scrollx! ]]
-                       bgp4 [[ tm.scrolly! tm.scrollx! ]]    
+        x p>s  160 - 0 max  y p>s 120 - 0 max
+        2dup  bgp1 [[ tm.scrolly! tm.scrollx! ]]
+        2dup  bgp2 [[ tm.scrolly! tm.scrollx! ]]
+              bgp4 [[ tm.scrolly! tm.scrollx! ]]    
     ]]    
     bgp1 [[ draw-as-tilemap ]] 
     bgp2 [[ draw-as-tilemap ]] 
 
     1 object [[
-        m x floor 160e f- 0e fmax fnegate zoom f*
-          y floor 120e f- 0e fmax fnegate zoom f* al_translate_transform
+        m x p>s 160 - 0 max negate zoom p* s>f
+          y p>s 120 - 0 max negate zoom p* s>f al_translate_transform
         m al_use_transform 
     ]]
     draw-sprites-ex
@@ -68,7 +72,8 @@ create levels 1 , 5 , 9 , 4 , 8 , 3 , 7 , 2 , 6 ,
 
 0e fvalue counter
 0e fvalue throb
-: /throb  counter deg>rad fcos fnegate 2e f/ 0.5e f+ to throb 2e +to counter ;
+: /throb
+    counter deg>rad fcos fnegate 2e f/ 0.5e f+ to throb 2e +to counter ;
 
 :while win resume
     0e to counter
@@ -81,7 +86,7 @@ create levels 1 , 5 , 9 , 4 , 8 , 3 , 7 , 2 , 6 ,
     0e 0e 320e 240e
         0e 0e 0e 0.75e al_draw_filled_rectangle
     /throb
-    11 bmp 160e 120e fover fover throb fdup 0e 0 al_draw_scaled_rotated_bitmap
+    11 bitmap @ 160e 120e fover fover throb fdup 0e 0 al_draw_scaled_rotated_bitmap
 ;
 :while win step
     <enter> pressed if next-level game then
@@ -90,9 +95,26 @@ create levels 1 , 5 , 9 , 4 , 8 , 3 , 7 , 2 , 6 ,
 :while title resume
 ;
 :while title update
-    12 bmp 0e 0e 0 al_draw_bitmap
+    12 bitmap @ 0e 0e 0 al_draw_bitmap
 ;
 :while title step
     2x
     <enter> pressed if -1 to level# next-level game then
+;
+
+:while game update   \ called once a frame to draw graphics
+    game-update
+    
+    [ dev ] [if]
+        0 0 at zstr[ 0 object 's debug ]zstr print
+    [then]
+;
+
+:while game step     \ called once a frame to move objects
+    finit
+    max-objects 0 do
+        i object [[ en if
+            think  x vx + x!  y vy + y!
+        then ]]
+    loop
 ;

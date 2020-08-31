@@ -1,17 +1,15 @@
-require ld46-utils.f
-require lib/fv2d.f
 require objlib.f
 require common.f
 
 anew scripts
 : prefab:
     prefab:
-    1e scalex! 1e scaley! \ all floats need to be initialized ...
-    0e angle!
-    0e ofsx! 0e ofsy!
-    0e vx! 0e vy!
-    0e mbx! 0e mby!
-    16e mbw! 16e mbh!
+    1 p scalex! 1 p scaley!   \ scale needs to be initialized ...
+    0 angle!
+    0 ofsx! 0 ofsy!
+    0 vx! 0 vy!
+    0 mbx! 0 mby!
+    16 mbw! 16 mbh!
 ;
 
 : do-collisions

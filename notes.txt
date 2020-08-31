@@ -1,0 +1,8 @@
+8/30/2020
+
+The documentation I wrote as comments throughout the code has been clobbered by
+copying over the code from vfxland2 (which uses fixed point instead of floats)
+
+I got things running but I can't see anything.  Things are kind of annoying to debug. It makes me want to rework things a bit to be easier to understand and debug.
+
+I reaffirmed today (at the pool) that it doesn't matter what I use to make a game that would get me a better job.  I just have to make that finished game.

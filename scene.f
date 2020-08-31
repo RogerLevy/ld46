@@ -1,8 +1,8 @@
+
 require lib/filelib.f
-require ld46-utils.f
+require utils.f
 require lib/a.f
 
-( Define tilemap planes )
 256 256 plane: bgp1 1 tm.bmp#! ;plane
 256 256 plane: bgp2 1 tm.bmp#! ;plane
 256 256 plane: bgp3 1 tm.bmp#! ;plane
@@ -10,8 +10,6 @@ require lib/a.f
 create bgplanes bgp1 , bgp2 , bgp3 , bgp4 ,
 : bgp  cells bgplanes + @ ;
 
-
-( Define array for tile attributes; not used in LD46 )
 1024 cells constant /tileattrs 
 
 create tiledata /tileattrs lenof bitmap * /allot
@@ -24,34 +22,34 @@ create tiledata /tileattrs lenof bitmap * /allot
 0
     64 zgetset l.zstm l.zstm!       \ tilemap path
     64 zgetset l.zbmp l.zbmp!       \ tile bitmap path
-    fgetset l.parax l.parax!
-    fgetset l.paray l.paray!
-    fgetset l.tw l.tw!              \ tile size
-    fgetset l.th l.th!
-    fgetset l.scrollx l.scrollx!    \ initial scroll coords in pixels
-    fgetset l.scrolly l.scrolly!
+    pgetset l.parax l.parax!
+    pgetset l.paray l.paray!
+    getset l.tw l.tw!              \ tile size
+    getset l.th l.th!
+    getset l.scrollx l.scrollx!    \ initial scroll coords in pixels
+    getset l.scrolly l.scrolly!
     getset l.bmp# l.bmp#!
 constant /LAYER
 
 \ internal scene struct
 0
     32 zgetset s.zname s.zname!
-    fgetset s.w s.w!      \ bounds
-    fgetset s.h s.h!
+    getset s.w s.w!      \ bounds
+    getset s.h s.h!
     4 /layer field[] s.layer
 constant /SCENE
 
 256 /scene array scene
 64 1024 cells array tiledata  \ attribute data (64 tilesets supported)
 
-: init-layer  16e fdup l.th! l.tw! 1e fdup l.paray! l.parax!
-    0e fdup l.scrolly! l.scrollx! ;
+: init-layer  16 l.tw! 16 l.th!  1 p l.parax! 1 p l.paray!
+    0 l.scrollx! 0 l.scrolly! ;
 
 : ?exist
     dup zcount file-exists not if cr zcount type ."  not found" 0 else 1 then
 ;
 
-: load-stm ( zstr tilemap -- )  \ Load simple tilemap
+: load-stm ( zstr tilemap -- )
     [[ ?dup if ?exist if r/o[ 
         0 sp@ 4 read drop
         0 sp@ 2 read ( w ) dup tm.cols! cells tm.stride!
@@ -60,7 +58,7 @@ constant /SCENE
     ]file then then ]] 
 ;
 
-: create-stm ( cols rows zstr -- )  \ Create new simple tilemap
+: create-stm ( cols rows zstr -- )
     newfile[
         s" STMP" write
         over sp@ 2 write drop
@@ -70,38 +68,38 @@ constant /SCENE
     ]file
 ;
 
-: load-iol ( zstr -- )  \ Load initial object list
+: load-iol ( zstr -- )
     ?dup if ?exist if r/o[
         0 object bytes-left read 
     ]file then then
 ;
 
-: save-iol ( zstr -- )  \ Save initial object list
+: save-iol ( zstr -- )
     newfile[
         0 object  [ lenof object /objslot * ]#  write
     ]file 
 ;
 
 : clear-tilemap  ( tilemap -- )
-    [[ tm.base  tm.dims * cells  erase  ]] ;
- 
+    [[ tm.base  tm.rows tm.stride *  erase  ]] ;
+
 : clear-objects  ( -- )
     0 object  [ lenof object /objslot * ]# erase ;
 
-: scene:  ( i - <name> ) ( - n )  \ Define scene
+: scene:  ( i - <name> ) ( - n )
     >in @ >r
     dup constant scene [[
     r> >in ! bl parse s>z s.zname!
-    [ bgp1 's tm.cols 16 * ]# s>f fdup s.w! s.h!
+    [ bgp1 's tm.cols 16 * ]# dup s.w! s.h!
     4 0 do i s.layer [[ init-layer ]] loop
 ;
 
 : ;scene ]] ;
 
 : iol-path  ( scene ) z" data/levels/" z$ swap 's s.zname z+  +z" .iol" ;
-: tad-path  ( layer ) 's l.zbmp zcount 4 - s>z +z" .tad" ;
+\ : tad-path  ( layer ) 's l.bmp# zbmp-file zcount 4 - s>z +z" .tad" ;
 
-: load  ( n )  \ Load scene
+: load  ( n )
     scene [[
         4 0 do i s.layer [[
             l.tw l.th i bgp [[ tm.th! tm.tw! ]]
@@ -114,11 +112,11 @@ constant /SCENE
                     me clear-tilemap
                 ]]
             then            
-            l.zbmp @ if 
-                my tad-path ?exist if
-                    r/o[ 0 l.bmp# tileattrs /tileattrs read ]file
-                then
-            then
+\            l.bmp# bmp if
+\                my tad-path ?exist if
+\                    r/o[ 0 l.bmp# tileattrs /tileattrs read ]file
+\                then
+\            then
         ]] loop
         my iol-path ?exist if load-iol else clear-objects then
     ]]
@@ -129,8 +127,9 @@ constant /SCENE
     [ lenof scene ]# 0 do
         i scene [[ s.zname zcount ?dup if
             cr ." #" i 3 .r ."  --- " type ."  --- " 
-            s.w f>s . ." x " s.h f>s .
+            s.w . ." x " s.h .
             else drop then
         ]]
     loop cr 
 ;
+

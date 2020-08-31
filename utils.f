@@ -44,9 +44,12 @@ create pen 0 , 0 ,
 : type  ?dup if type else drop then ;
 
 
-: +xy  y f+ y! x f+ x! ;
+: +xy  y + y! x + x! ;
 
 : ixy!  iy! ix! ;
 
 : frame  ( n bmp# - ix iy )
-    bmp bmpw iw / /mod ih * swap iw * swap ;
+    bitmap @ bmpw iw / /mod ih * swap iw * swap ;
+
+: near?  ( obj n - f )
+    over if >r 's xy xy pdist r> p <= else drop then ;

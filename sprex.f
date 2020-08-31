@@ -2,27 +2,28 @@
 ( high bit of attributes enables transformation )
 
 /OBJECT
-    fgetset angle angle!
-    fgetset scalex scalex!
-    fgetset scaley scaley!
-    fgetset ofsx ofsx!
-    fgetset ofsy ofsy!
-    fgetset orgx orgx!
-    fgetset orgy orgy!
+    pgetset angle angle!
+    pgetset scalex scalex!
+    pgetset scaley scaley!
+    pgetset ofsx ofsx!
+    pgetset ofsy ofsy!
+    pgetset orgx orgx!
+    pgetset orgy orgy!
 to /OBJECT
 
-: ~sprex  attr $80000000 or attr! ;
+: sprex/  attr $80000000 or attr! ;
 : sprex   attr $80000000 and 0<> ;
 
 : draw-as-sprite-ex  ( bitmap# - )
-    bmp ?dup if
+    bitmap @ ?dup if
         ( bitmap ) ix iy iw ih al_create_sub_bitmap >r
         r@
-            r@ bmpw 2 / s>f orgx f+
-            r@ bmph 2 / s>f orgy f+
-            x floor r@ bmpw 2 / s>f f+ ofsx f+
-            y floor r@ bmph 2 / s>f f+ ofsy f+
-            scalex scaley angle deg>rad flip al_draw_scaled_rotated_bitmap
+            r@ bmpw p 2 / orgx + p>f
+            r@ bmph p 2 / orgy + p>f
+            x pfloor r@ bmpw p 2 / + ofsx + p>f
+            y pfloor r@ bmph p 2 / + ofsy + p>f
+            scalex p>f scaley p>f angle p>f deg>rad flip
+                al_draw_scaled_rotated_bitmap
         r> al_destroy_bitmap
     then
 ;

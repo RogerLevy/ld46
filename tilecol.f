@@ -1,7 +1,5 @@
 ( Simple tilemap collision )
 
-require ld46-utils.f
-
 : ~solid  attr $40000000 or attr! ;
 
 ( what sides the object collided )
@@ -27,58 +25,60 @@ module collisioning
         ; \ $ffff and map 's tm.bmp# tileflags ;
     
     : map@  ( col row - tile )
-        map find-tile @ ;
+        map locate-tile @ ;
 
     : cel? BIT_CEL and ; \ ' ceiling '
     : flr? BIT_FLR and ; \ ' floor '
     : wlt? BIT_WLT and ; \ ' wall left '
     : wrt? BIT_WRT and ; \ ' wall right '
     
-    0e fvalue nx
-    0e fvalue ny
+    0 value nx
+    0 value ny
     0 value t
     
-    : gap  16e ; 
-    : px  x mbx f+ ;
-    : py  y mby f+ ;
+    : gap  16 p ; 
+    : px  x mbx + ;
+    : py  y mby + ;
     \ : mbw iw s>f ;
     \ : mbh ih s>f ;    
 
-    : xy>cr  ( f: x y - c r )
-        fswap gap f/ f>s gap f/ f>s ;
+    : xy>cr  ( x y - c r )
+        gap p/ p>s swap gap p/ p>s swap ;
         
-    : pt  ( f: x y - n )  \ point
+    : pt  ( x y - n )  \ point
         xy>cr  map@ dup to t   tileprops@ ;          
 
     ( increment coordinates )
-    : ve+  fswap gap f+  px mbw f+ 1e f-  fmin  fswap ;
-    : he+  gap f+  mbh ny f+ 1e f-  fmin ;
+    : ve+  swap gap +  px mbw + 1 p -  min  swap ;
+    : he+  gap +  mbh ny + 1 p -  min ;
 
-    : +vy  +to ny ny py f- vy! ;
-    : +vx  +to nx nx px f- vx! ;
+    : +vy  +to ny ny py - vy! ;
+    : +vx  +to nx nx px - vx! ;
 
     ( push up/down )
-    : pu ( xy ) fnip gap fmod fnegate +vy  true to floor?  t on-tilemap-collide  ;
-    : pd ( xy ) fnip gap fmod fnegate gap f+ +vy  true to ceiling?  t on-tilemap-collide ;
+    : pu ( xy ) nip gap mod negate +vy
+        true to floor?  t on-tilemap-collide  ;
+    : pd ( xy ) nip gap mod negate gap + +vy
+        true to ceiling?  t on-tilemap-collide ;
 
     ( check up/down )
-    : f2dup fover fover ;
-    : f2drop fdrop fdrop ;
-    : cu mbw gap f/ f>s 2 + 0 do f2dup pt cel? if pd unloop exit then ve+ loop f2drop ;
-    : cd mbw gap f/ f>s 2 + 0 do f2dup pt flr? if pu unloop exit then ve+ loop f2drop ;
+    : cu mbw gap p/ p>s 2 + 0 do 2dup pt cel? if pd unloop exit then ve+ loop 2drop ;
+    : cd mbw gap p/ p>s 2 + 0 do 2dup pt flr? if pu unloop exit then ve+ loop 2drop ;
 
     ( push left/right )
-    : pl ( xy ) fdrop gap fmod fnegate +vx  true to rwall?  t on-tilemap-collide ;
-    : pr ( xy ) fdrop gap fmod fnegate gap f+ +vx  true to lwall?  t on-tilemap-collide ;
+    : pl ( xy ) drop gap mod negate +vx
+        true to rwall?  t on-tilemap-collide ;
+    : pr ( xy ) drop gap mod negate gap + +vx
+        true to lwall?  t on-tilemap-collide ;
 
     ( check left/right )
-    : cl  mbh gap f/ f>s 2 + 0 do f2dup pt wrt? if pr unloop exit then he+ loop f2drop ;
-    : crt mbh gap f/ f>s 2 + 0 do f2dup pt wlt? if pl unloop exit then he+ loop f2drop ;
+    : cl  mbh gap p/ p>s 2 + 0 do 2dup pt wrt? if pr unloop exit then he+ loop 2drop ;
+    : crt mbh gap p/ p>s 2 + 0 do 2dup pt wlt? if pl unloop exit then he+ loop 2drop ;
 
-    : ud vy 0e f<> if vy 0e f< if px ny cu exit then px ny mbh f+ cd then ;
-    : lr vx 0e f<> if vx 0e f< if nx ny cl exit then nx mbw f+ ny crt then ;
+    : ud vy if vy 0< if px ny cu exit then px ny mbh + cd then ;
+    : lr vx if vx 0< if nx ny cl exit then nx mbw + ny crt then ;
 
-    : init   px vx f+ to nx  py vy f+ to ny 
+    : init   px vx + to nx  py vy + to ny 
         0 to lwall? 0 to rwall? 0 to floor? 0 to ceiling? ;
 
     : do-tilemap-physics ( tilemap - ) to map  init ud lr ;

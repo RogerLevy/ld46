@@ -7,9 +7,9 @@ require sprex.f
     etype ALLEGRO_EVENT_KEY_CHAR = if
         <r> keycode = if
             shift? if
-                selected [[ angle 45e f- angle! ]]
+                selected [[ angle 45 p - angle! ]]
             else
-                selected [[ angle 45e f+ angle! ]]
+                selected [[ angle 45 p + angle! ]]
             then
         then
     then

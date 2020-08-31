@@ -5,8 +5,8 @@ prefab: player
 ext:
     include anim.f
     getset state# state#!        
-    fgetset dir dir!          \ angle (0=right,90=down...)
-    fgetset speed speed!
+    pgetset dir dir!          \ angle (0=right,90=down...)
+    pgetset speed speed!
 ;ext
 
 anim: idle_down_a 0 , ;anim
@@ -26,40 +26,40 @@ anim: call_right_a 10 , 11 , 12 , 12 , 12 , 12 , ;anim
 : dir-key-held?
     <up> held <down> held <right> held <left> held or or or ;
 
-: kb>xdir  0e <right> held if 1e f+ then  <left> held if 1e f- then ;
-: kb>ydir  0e <down> held if 1e f+ then  <up> held if 1e f- then ;
+: kb>xdir  0 <right> held if 1 p + then  <left> held if 1 p - then ;
+: kb>ydir  0 <down> held if 1 p + then  <up> held if 1 p - then ;
 
 : awithin?  2dup < if within? else rot 360 + -rot 360 + within? then ;
 
 : idle-animation
-    dir f>s 315 45  awithin? if 0e idle_right_a animate  0 flip!  then
-    dir f>s 45 135  awithin? if 0e idle_down_a  animate  then
-    dir f>s 135 225 awithin? if 0e idle_right_a animate  1 flip!  then
-    dir f>s 225 315 awithin? if 0e idle_up_a    animate  then
+    dir p>s 315 45  awithin? if 0 idle_right_a animate  0 flip!  then
+    dir p>s 45 135  awithin? if 0 idle_down_a  animate  then
+    dir p>s 135 225 awithin? if 0 idle_right_a animate  1 flip!  then
+    dir p>s 225 315 awithin? if 0 idle_up_a    animate  then
 ;
 
 : walk-animation
-    1e 12e f/ ( animation speed )
-    dir f>s 45 135  awithin? if walk_down_a  animate  exit then
-    dir f>s 225 315 awithin? if walk_up_a    animate  exit then
-    dir f>s 315 45  awithin? if walk_right_a animate  0 flip!  exit then
-    dir f>s 135 225 awithin? if walk_right_a animate  1 flip!  exit then
+    1 12 p/ ( animation speed )
+    dir p>s 45 135  awithin? if walk_down_a  animate  exit then
+    dir p>s 225 315 awithin? if walk_up_a    animate  exit then
+    dir p>s 315 45  awithin? if walk_right_a animate  0 flip!  exit then
+    dir p>s 135 225 awithin? if walk_right_a animate  1 flip!  exit then
 ;
 
 : call-animation
-    1e 8e f/ ( animation speed )
-    dir f>s 45 135  awithin? if call_down_a  animate  exit then
-    dir f>s 225 315 awithin? if call_up_a    animate  exit then
-    dir f>s 315 45  awithin? if call_right_a animate  0 flip!  exit then
-    dir f>s 135 225 awithin? if call_right_a animate  1 flip!  exit then
+    1 8 p/ ( animation speed )
+    dir p>s 45 135  awithin? if call_down_a  animate  exit then
+    dir p>s 225 315 awithin? if call_up_a    animate  exit then
+    dir p>s 315 45  awithin? if call_right_a animate  0 flip!  exit then
+    dir p>s 135 225 awithin? if call_right_a animate  1 flip!  exit then
 ;
 
 : idle-walk
     dir-key-held? if
-        1e speed! walk state#!
-        kb>xdir kb>ydir fangle dir!
+        1 p speed! walk state#!
+        kb>xdir kb>ydir pangle dir!
     else
-        0e speed! idle state#!
+        0 speed! idle state#!
     then
 ;
 
@@ -70,11 +70,9 @@ anim: call_right_a 10 , 11 , 12 , 12 , 12 , 12 , ;anim
     0e speed!
 ;
 
-0e fvalue ftemp
-: near?  to ftemp  dup if 's xy xy fdist ftemp f<= then ;
 
 : ?win
-    car1 24e near? drunk1 40e near? and following? and if win exit then
+    car1 24 near? drunk1 40 near? and following? and if win exit then
 ;
 
 : z-logic
@@ -93,16 +91,16 @@ player :: think
     \ logic
     ?win
     <z> pressed if z-logic then
-    <x> pressed if drunk1 24e near? if grapple exit then then
+    <x> pressed if drunk1 24 near? if grapple exit then then
     
     state# case
         idle of idle-walk endof
         walk of idle-walk endof
-        calling of counter 6e f>= if idle state#! then endof
+        calling of counter 6 p >= if idle state#! then endof
     endcase
     
     \ physics
-    dir speed fvec vy! vx!
+    dir speed pvec vy! vx!
     do-collisions
     
     \ animation
@@ -115,8 +113,8 @@ player :: think
 
 player :: start
     me to player1
-    0e mbx! 24e mby! 16e mbw! 8e mbh!
-    ~sprex
-    90e dir!
+    0 mbx! 24 p mby! 16 p mbw! 8 p mbh!
+    sprex/
+    90 p dir!
     stop
 ;

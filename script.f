@@ -11,49 +11,37 @@ max-prefabs 1024 array sdata  \ static data such as actions
 
 : lastword  last @ ctrl>nfa count ;
 
-((
-Define a prefab 
----------------
-Prefabs are to object types as prototypes are to classes. 
-Currently it's only where you define the initial values of 
-common fields.  Object-specific fields should be initialized 
-in the object's START method.
-))
-
 : prefab: ( n - <name> ) ( - n )
     dup constant dup prefab [[
     dup >r lastword r> sdata place
     dup objtype!
-        16 * s>f fdup xy!  \ default positioning; can be changed using the prefabs.iol file
+        16 * p dup xy!  \ default positioning; can be changed using the prefabs.iol file
     true en!
 ;
 
 : ;prefab ]] ;
 
 : ext: /userfields ;
-: ;ext ;
+: ;ext drop ;
 
-
-( SDATA refers to Static Data; same idea as static props of a class. )
 32  \ name (1+31)
 value /sdata
 
-( Methods are vectored words; the sdata is treated as the table. )
 : (method!) create /sdata , does> @ objtype sdata + ! ;
 : (method) create /sdata  , does> @ objtype sdata + @ execute ;
 : method  (method) (method!) cell +to /sdata ;
 : ::  ( prefab - <name> )
     prefab [[ :noname ' >body @ objtype sdata + ! ]] ;
 
-method start start!   \ executed when obj is instanced
-method think think!   \ executed once a frame
+method start start!
+method think think!
 
 : become  ( n ) >r
     x y
     r> prefab me /objslot move
     y! x! ;
 
-: script  ( n - <name> )   \ (re)load a script
+: script  ( n - <name> )
     dup prefab 's en abort" Prefab # already taken"
     false to warnings?
     include
@@ -62,7 +50,7 @@ method think think!   \ executed once a frame
 
 create temp$ 256 allot
 
-: hone  ( - <name> ) me >r   \ convenience word to reload a script
+: hone  ( - <name> ) me >r
     false to warnings?
     >in @ ' >body @ swap >in !
     s" scripts/" temp$ place  bl parse temp$ append  temp$ count GetPathSpec included
@@ -70,14 +58,14 @@ create temp$ 256 allot
     r> as
 ;  
 
-: load-prefabs 
+: load-prefabs
     z" prefabs.iol" ?dup if ?exist if
         r/o[ 0 prefab [ lenof prefab /objslot * ]# read ]file
     then then
     s" scripts.f" included
 ;
 
-: like:  ( - <name> )   \ simple inheritance
+: like:  ( - <name> )
     objtype >r
     ' >body @ dup become
     r> objtype!
