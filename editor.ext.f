@@ -18,7 +18,7 @@ require sprex.f
 cr .( Extension: in OBJED, R and Shift+R rotate the current object ) \ "
 
 : ld46-render-sprites
-    draw-sprites-ex
+    paintex
     bgp4 [[ draw-as-tilemap ]] 
 ;
 ' ld46-render-sprites is render-sprites

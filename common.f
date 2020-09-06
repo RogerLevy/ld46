@@ -61,7 +61,7 @@ create levels 1 , 5 , 9 , 4 , 8 , 3 , 7 , 2 , 6 ,
           y p>s 120 - 0 max negate zoom p* s>f al_translate_transform
         m al_use_transform 
     ]]
-    draw-sprites-ex
+    paintex
 
     2x
     bgp4 [[ draw-as-tilemap ]]

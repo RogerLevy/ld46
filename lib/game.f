@@ -45,7 +45,6 @@ create kbs0 /ALLEGRO_KEYBOARD_STATE allot&erase
 create kbs1 /ALLEGRO_KEYBOARD_STATE allot&erase
 create ms0 /ALLEGRO_MOUSE_STATE allot&erase
 create ms1 /ALLEGRO_MOUSE_STATE allot&erase
-create ms2 /ALLEGRO_MOUSE_STATE allot&erase
 0 value mixer
 0 value voice
 create mi /ALLEGRO_MONITOR_INFO allot&erase
@@ -286,22 +285,21 @@ game
 : fcolor  ( f: r g b )  to fgb to fgg to fgr ;
 : falpha  ( f: a )  to fga ;
 
-: draw-as-sprite  ( bitmap# - )
-    bitmap @ ?dup if
+: draw  ( - )
+    bmp# bitmap @ ?dup if
         ix s>f iy s>f iw s>f ih s>f
-        x p>f floor y p>f floor flip al_draw_bitmap_region
+        x pfloor p>f y pfloor p>f flip al_draw_bitmap_region
     then
 ;
 
-: draw-sprites ( - )
+: paint ( - )
     1 al_hold_bitmap_drawing
     max-objects 0 do
         i object as
-        en if bmp# draw-as-sprite then
+        en if draw then
     loop
     0 al_hold_bitmap_drawing
 ;
-
 
 : 2x
     2 p to zoom
@@ -416,13 +414,13 @@ constant /TILEMAP
     ]]
 ;
 
-: locate-tile ( col row tilemap -- adr )
+: tile ( col row tilemap -- adr )
     [[ tm.stride * swap cells + tm.base + ]] ;
 
 \ ---------------------------------------------------------------
 
 :while game update
-    2x 0e 0e 0e 1e fcolor cls draw-sprites
+    2x 0e 0e 0e 1e fcolor cls paint
 ;
 
 \ ---------------------------------------------------------------

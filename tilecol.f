@@ -25,7 +25,7 @@ module collisioning
         ; \ $ffff and map 's tm.bmp# tileflags ;
     
     : map@  ( col row - tile )
-        map locate-tile @ ;
+        map tile @ ;
 
     : cel? BIT_CEL and ; \ ' ceiling '
     : flr? BIT_FLR and ; \ ' floor '

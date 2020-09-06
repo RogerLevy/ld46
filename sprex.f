@@ -14,8 +14,8 @@ to /OBJECT
 : sprex/  attr $80000000 or attr! ;
 : sprex   attr $80000000 and 0<> ;
 
-: draw-as-sprite-ex  ( bitmap# - )
-    bitmap @ ?dup if
+: drawex  ( - )
+    bmp# bitmap @ ?dup if
         ( bitmap ) ix iy iw ih al_create_sub_bitmap >r
         r@
             r@ bmpw p 2 / orgx + p>f
@@ -28,15 +28,15 @@ to /OBJECT
     then
 ;
 
-: draw-sprites-ex ( - )
+: paintex ( - )
     1 al_hold_bitmap_drawing
     max-objects 0 do
         i object to me
         en if
             sprex if
-                bmp# draw-as-sprite-ex
+                drawex
             else
-                bmp# draw-as-sprite 
+                draw
             then
         then
     loop
