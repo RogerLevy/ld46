@@ -1,0 +1,14 @@
+data dog
+
+
+create'd words
+arrays (values, pointers, objects)
+2d arrays (values)
+stacks
+objects
+
+search by name
+search by value
+browse tree, sorted various ways
+
+extensible hex editor
