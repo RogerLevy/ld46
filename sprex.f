@@ -1,3 +1,6 @@
+require lib/fixed.f
+require lib/pv2d.f
+
 ( scaled/rotated sprites - fairly slow )
 ( high bit of attributes enables transformation )
 

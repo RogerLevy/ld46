@@ -6,7 +6,7 @@ include lib/fixed.f
 include lib/stackarray.f
 include lib/game.f        \ Prelude of game library
 
-require lib/pv2d.f        \ Experimental 2d float ops
+require lib/pv2d.f        \ Fixed-point vectors
 require keys.f            \ Key code constants
 require lib/filelib.f     \ File ops
 require utils.f           \ Miscellanea
